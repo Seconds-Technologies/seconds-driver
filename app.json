@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "seconds-driver",
+    "slug": "seconds-driver",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "seconds-driver"
+}
