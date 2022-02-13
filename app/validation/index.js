@@ -8,3 +8,8 @@ export const signupSchema = Yup.object({
 	password: Yup.string().min(8, 'Min. 8 characters').required('Required'),
 	confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
 });
+
+export const loginSchema = Yup.object({
+	phone: Yup.string().matches(phoneRegExp2, 'Phone number is not valid').required('* Required'),
+	password: Yup.string().min(8, 'Min. 8 characters').required('Required'),
+})
