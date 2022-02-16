@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistReducer, PURGE} from "redux-persist";
 import {secondsServer} from "../../api/server";
 import currentDriver from './currentDriver';
-import driverReducer from '../features/drivers/driversSlice';
+import driverReducer from '../features/drivers/driverSlice';
 
 const persistConfig = {
 	key: "root",

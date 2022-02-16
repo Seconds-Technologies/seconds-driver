@@ -4,6 +4,7 @@ import {useTailwind} from "tailwind-rn";
 import {useDispatch, useSelector} from "react-redux";
 import {LOGOUT} from "../store/actionTypes";
 import {TabView, SceneMap} from 'react-native-tab-view';
+import TodayTasks from "../containers/TodayTasks";
 
 const Home = (props) => {
 	const tailwind = useTailwind()
@@ -11,14 +12,6 @@ const Home = (props) => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = React.useState(0);
 	const { firstname, lastname } = useSelector(state => state['drivers'].driver )
-
-	const TodayTasks = () => (
-		<View>
-			<View style={tailwind('flex grow justify-center md:items-center my-6')}>
-				<Text style={tailwind('text-3xl')}>Today's Tasks</Text>
-			</View>
-		</View>
-	);
 
 	const AllTasks = () => (
 		<View>

@@ -36,7 +36,7 @@ const SignUp = (props) => {
 	}, [container])
 
 	const errorAlert = (
-		<View style={tailwind("bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded")}>
+		<View style={tailwind("bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded my-5")}>
 			<Text style={tailwind("font-bold")}>{error}</Text>
 			<TouchableOpacity
 				style={tailwind('absolute flex justify-center top-0 bottom-0 right-0 px-4')}
@@ -51,6 +51,7 @@ const SignUp = (props) => {
 			<View style={tailwind('flex grow justify-center md:items-center my-6')}>
 				<Text style={tailwind('text-3xl md:text-2xl text-center font-bold md:font-medium mb-6')}>Complete Sign
 					Up</Text>
+				{!!error && errorAlert}
 				<Formik
 					enableReinitialize
 					validationSchema={signupSchema}
@@ -140,7 +141,6 @@ const SignUp = (props) => {
 					}}
 					title={"RESET"}/>
 			</View>*/}
-			{!!error && errorAlert}
 		</View>
 	);
 }

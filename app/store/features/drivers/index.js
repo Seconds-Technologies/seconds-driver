@@ -1,5 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import axios from "axios";
+import {apiCall, serverCall} from "../../../api";
 
 export const setDriver = (state, action) => {
 	const {
@@ -19,29 +19,29 @@ export const setDriver = (state, action) => {
 	}
 }
 
-export const registerDriver = createAsyncThunk('drivers/setDriver', async (payload, {
+export const registerDriver = createAsyncThunk('drivers/registerDriver', async (payload, {
 	dispatch,
 	getState,
 	rejectWithValue
 }) => {
 	try {
-		const response = (await axios.post('http://localhost:8081/server/driver/verify', payload)).data
+		const response = await serverCall('POST', '/server/driver/verify', payload)
 		console.log(response)
 		return response
 	} catch (e) {
-		let {message} = e.response.data.error
-		return rejectWithValue({code: e.response.status, message})
+		console.log(e)
+		return rejectWithValue({message: e.message})
 	}
 });
 
-export const loginDriver = createAsyncThunk('drivers/setDriver', async (payload, {rejectWithValue}) => {
+export const loginDriver = createAsyncThunk('drivers/loginDriver', async (payload, {rejectWithValue}) => {
 	try {
-		const response = (await axios.post('http://localhost:8081/server/driver/login', payload)).data
+		const response = await serverCall('POST', '/server/driver/login', payload)
 		console.log(response)
 		return response
 	} catch (e) {
-		let {message} = e.response.data.error
-		return rejectWithValue({code: e.response.status, message})
+		console.log(e)
+		return rejectWithValue({message: e.message})
 	}
 
 })
