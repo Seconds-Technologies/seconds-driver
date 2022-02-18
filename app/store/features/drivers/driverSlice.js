@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {loginDriver, registerDriver, setDriver} from "./index";
+import {loginDriver, registerDriver, setDriver} from "./auth";
 
 const initialState = {
 	loading: false,

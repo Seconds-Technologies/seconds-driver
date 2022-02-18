@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {Formik} from "formik";
 import {loginSchema} from "../validation";
-import {loginDriver} from "../store/features/drivers";
+import {loginDriver} from "../store/features/drivers/auth";
 import {useTailwind} from "tailwind-rn";
 import {useDispatch} from "react-redux";
 import * as Device from "expo-device";

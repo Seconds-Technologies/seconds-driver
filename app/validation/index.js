@@ -11,5 +11,5 @@ export const signupSchema = Yup.object({
 
 export const loginSchema = Yup.object({
 	phone: Yup.string().matches(phoneRegExp2, 'Phone number is not valid').required('* Required'),
-	password: Yup.string().min(8, 'Min. 8 characters').required('Required'),
+	password: Yup.string().min(4, 'Min. 4 characters').required('Required'),
 })

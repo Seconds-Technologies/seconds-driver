@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { REACT_APP_API_BASE_URL, REACT_APP_SERVER_BASE_URL } from "@env"
+import {deleteKey} from "../services/keyStore";
 
 const apiAxios = axios.create({
 	baseURL: `${REACT_APP_API_BASE_URL}`,
@@ -9,10 +10,15 @@ const serverAxios = axios.create({
 	baseURL: `${REACT_APP_SERVER_BASE_URL}`,
 });
 
-serverAxios.interceptors.response.use((response) => {
-	console.log(response)
-	return response
-})
+export async function setApiKey(token) {
+	if (token) {
+		apiAxios.defaults.headers.common['X-Seconds-Api-Key'] = token;
+		console.log(apiAxios.defaults)
+	} else {
+		delete apiAxios.defaults.headers.common['X-Seconds-Api-Key'];
+		await deleteKey("apiKey")
+	}
+}
 
 export function setTokenHeader(token) {
 	if (token) {
@@ -30,7 +36,7 @@ export function setTokenHeader(token) {
  * @param config (optional) extra configurations for the request e.g. headers, query params, etc.
  * @returns {Promise<JSON>}
  */
-export function serverCall(method, path, data = null, config = {}) {
+export function serverCall(method, path, data =null, config = {}) {
 	return new Promise((resolve, reject) => {
 		return !data
 			? serverAxios[method.toLowerCase()](path, config)

@@ -2,8 +2,8 @@ import {combineReducers} from '@reduxjs/toolkit'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistReducer, PURGE} from "redux-persist";
 import {secondsServer} from "../../api/server";
-import currentDriver from './currentDriver';
 import driverReducer from '../features/drivers/driverSlice';
+import jobsReducer from '../features/jobs/jobSlice';
 
 const persistConfig = {
 	key: "root",
@@ -13,7 +13,8 @@ const persistConfig = {
 };
 
 const appReducer = combineReducers({
-	drivers: driverReducer
+	drivers: driverReducer,
+	jobs: jobsReducer
 	// [secondsServer.reducerPath]: secondsServer.reducer,
 });
 

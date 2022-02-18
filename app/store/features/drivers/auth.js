@@ -1,8 +1,10 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {apiCall, serverCall} from "../../../api";
+import {apiCall, serverCall, setApiKey, setTokenHeader} from "../../../api";
+import {saveKey} from "../../../services/keyStore";
 
 export const setDriver = (state, action) => {
 	const {
+		id,
 		clientIds: businessClients,
 		phone,
 		email,
@@ -15,7 +17,7 @@ export const setDriver = (state, action) => {
 	console.log("Setting driver")
 	return {
 		isAuthenticated: true,
-		driver: {businessClients, phone, email, firstname, lastname, status, vehicle, verified}
+		driver: {id, businessClients, phone, email, firstname, lastname, status, vehicle, verified}
 	}
 }
 
@@ -37,7 +39,9 @@ export const registerDriver = createAsyncThunk('drivers/registerDriver', async (
 export const loginDriver = createAsyncThunk('drivers/loginDriver', async (payload, {rejectWithValue}) => {
 	try {
 		const response = await serverCall('POST', '/server/driver/login', payload)
-		console.log(response)
+		await setApiKey(response.apiKey)
+		await setTokenHeader(response.token)
+		await saveKey("credentials", JSON.stringify({apiKey: response.apiKey, token: response.token}))
 		return response
 	} catch (e) {
 		console.log(e)

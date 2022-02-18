@@ -3,24 +3,27 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start -p 19000",
     "start-dev": " --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web",
+    "web": "expo start --web -p 19001",
     "build:tailwind": "tailwindcss --input input.css --output tailwind.css --no-autoprefixer && tailwind-rn",
     "dev:tailwind": "concurrently \"tailwindcss --input input.css --output tailwind.css --no-autoprefixer --watch\" \"tailwind-rn --watch\""
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.5",
     "@react-native-async-storage/async-storage": "^1.16.0",
+    "@react-native-picker/picker": "^2.2.1",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.5.0",
     "@reduxjs/toolkit": "^1.7.2",
     "axios": "^0.25.0",
     "classnames": "^2.3.1",
     "expo": "~44.0.2",
+    "expo-constants": "~13.0.1",
     "expo-device": "~4.1.0",
+    "expo-secure-store": "~11.1.0",
     "expo-splash-screen": "~0.14.1",
     "expo-status-bar": "~1.2.0",
     "formik": "^2.2.9",
@@ -45,10 +48,27 @@
     "concurrently": "^7.0.0",
     "dotenv": "^16.0.0",
     "postcss": "^8.4.6",
+    "prettier": "^2.5.1",
     "prop-types": "^15.8.1",
     "react-native-dotenv": "^3.3.1",
     "redux-logger": "^3.0.6",
     "tailwindcss": "^3.0.19"
   },
-  "private": true
+  "private": true,
+  "prettier": {
+    "arrowParens": "avoid",
+    "useTabs": true,
+    "tabWidth": 4,
+    "printWidth": 150,
+    "trailingComma": "none",
+    "jsxSingleQuote": true,
+    "semi": true,
+    "bracketSpacing": true,
+    "react/jsx-max-props-per-line": [
+      1,
+      {
+        "when": "always"
+      }
+    ]
+  }
 }

@@ -8,7 +8,7 @@ import {signupSchema} from "../validation";
 import {useDispatch} from "react-redux";
 import {persistor} from "../store";
 import {Ionicons} from '@expo/vector-icons'
-import {registerDriver} from "../store/features/drivers";
+import {registerDriver} from "../store/features/drivers/auth";
 
 const SignUp = (props) => {
 	const [container, setContainer] = useState("md:mx-32 p-5 border-0 md:border-4 border-gray-300 rounded-xl")
