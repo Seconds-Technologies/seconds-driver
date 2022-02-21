@@ -1,9 +1,9 @@
 import {combineReducers} from '@reduxjs/toolkit'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistReducer, PURGE} from "redux-persist";
-import {secondsServer} from "../../api/server";
 import driverReducer from '../features/drivers/driverSlice';
 import jobsReducer from '../features/jobs/jobSlice';
+import { deleteKey } from "../../services/keyStore";
 
 const persistConfig = {
 	key: "root",
@@ -20,7 +20,7 @@ const appReducer = combineReducers({
 
 const rootReducer = (state, action) => {
 	if (action.type === 'LOGOUT') {
-		// storage.removeItem('persist:otherKey')
+		deleteKey("credentials")
 		state = undefined;
 	}
 	return appReducer(state, action);

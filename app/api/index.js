@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { REACT_APP_API_BASE_URL, REACT_APP_SERVER_BASE_URL } from "@env"
+import { REACT_APP_API_BASE_URL, REACT_APP_SERVER_BASE_URL, REACT_APP_ENV_MODE } from "@env"
 import {deleteKey} from "../services/keyStore";
 
 const apiAxios = axios.create({
@@ -67,20 +67,20 @@ export function apiCall(method, path, data =null, config={}){
 		return !data
 			? apiAxios[method.toLowerCase()](path, config)
 				.then(res => {
-					process.env.REACT_APP_ENV_MODE !== "production" && console.log(res.data);
+					REACT_APP_ENV_MODE !== "production" && console.log(res.data);
 					resolve(res.data);
 				})
 				.catch(err => {
-					process.env.REACT_APP_ENV_MODE !== "production" && console.error(err);
+					REACT_APP_ENV_MODE !== "production" && console.error(err);
 					err.response.data.error ? reject(err.response.data.error) : reject(err.response.data);
 				})
 			: apiAxios[method.toLowerCase()](path, data, config)
 				.then(res => {
-					process.env.REACT_APP_ENV_MODE !== "production" && console.log(res.data);
+					REACT_APP_ENV_MODE !== "production" && console.log(res.data);
 					resolve(res.data);
 				})
 				.catch(err => {
-					process.env.REACT_APP_ENV_MODE !== "production" && console.error(err);
+					REACT_APP_ENV_MODE !== "production" && console.error(err);
 					err.response.data.error ? reject(err.response.data.error) : reject(err.response.data);
 				});
 	})

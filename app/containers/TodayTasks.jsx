@@ -1,6 +1,5 @@
-import React, { useCallback, useMemo } from "react";
-import { Button, FlatList, Text, View, TouchableOpacity } from "react-native";
-import PropTypes from "prop-types";
+import React, { useCallback } from "react";
+import { Button, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -20,7 +19,11 @@ const TodayTasks = props => {
 				data={currentJobs}
 				renderItem={({ item, index }) => {
 					return (
-						<TouchableOpacity activeOpacity={0.9} style={tailwind("pb-4 border border-gray-300")} onPress={() => navigation.navigate({ name: "Task", key: item._id })}>
+						<TouchableOpacity
+							activeOpacity={0.9}
+							style={tailwind("pb-4 border border-gray-300")}
+							onPress={() => navigation.navigate({ name: "Task", key: item._id })}
+						>
 							<View
 								style={{
 									height: 7,

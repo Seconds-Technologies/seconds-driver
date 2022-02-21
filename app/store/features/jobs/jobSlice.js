@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import { acceptJob, fetchJobs, removeJob, setAllJobs, updateJob, updateJobStatus } from "./index";
+import { acceptJob, fetchJobs, removeJob, setAllJobs, updateJob, updateJobStatus } from "./actions";
 import { STATUS } from "../../../constants";
 
 const initialState = {
@@ -20,7 +20,6 @@ export const job = createSlice({
 		builder
 			.addCase(fetchJobs.fulfilled, setAllJobs)
 			.addCase(fetchJobs.rejected, (state, action) => {
-				state.loading = false
 				console.log("REJECTED:", action.payload)
 			})
 			.addCase(acceptJob.fulfilled, updateJob)
@@ -28,7 +27,8 @@ export const job = createSlice({
 				console.log("REJECTED", action.payload)
 			})
 			.addCase(updateJobStatus.fulfilled, (state, action) => {
-				action.payload["status"] === STATUS.CANCELLED ? removeJob(state, action) : updateJob(state, action)
+				console.log(action.payload);
+				return action.payload["status"] === STATUS.CANCELLED ? removeJob(state, action) : updateJob(state, action)
 			})
 			.addCase(updateJobStatus.rejected, (state, action) => {
 				console.log("REJECTED", action.payload)

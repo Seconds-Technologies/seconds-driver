@@ -1,13 +1,15 @@
 import React, { useCallback } from "react";
-import { Button, FlatList, Text, View } from "react-native";
+import { Button, FlatList, Text, View, TouchableOpacity } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import { useDispatch, useSelector } from "react-redux";
-import { acceptJob, updateJobStatus } from "../store/features/jobs";
+import { acceptJob, updateJobStatus } from "../store/features/jobs/actions";
 import { getColor } from "../helpers";
 import { STATUS } from "../constants";
+import { useNavigation } from "@react-navigation/native";
 
 const AllTasks = props => {
 	const tailwind = useTailwind();
+	const navigation = useNavigation();
 	const dispatch = useDispatch();
 	const { id: driverId } = useSelector(state => state["drivers"].driver);
 	const { allJobs } = useSelector(state => state["jobs"]);
@@ -22,7 +24,17 @@ const AllTasks = props => {
 					data={allJobs}
 					renderItem={({ item, index }) => {
 						return (
-							<View key={index} style={tailwind("pb-4 border border-gray-300")}>
+							<TouchableOpacity
+								key={index}
+								activeOpacity={0.9}
+								style={tailwind("pb-4 border border-gray-300")}
+								onPress={() =>
+									navigation.navigate({
+										name: "Task",
+										key: item._id
+									})
+								}
+							>
 								<View
 									style={{
 										height: 7,
@@ -40,23 +52,36 @@ const AllTasks = props => {
 									</Text>
 								</View>
 								<View style={tailwind("pt-3 pr-3 flex items-end")}>
-									<View style={tailwind("flex grow flex-row justify-around w-1/2")}>
-										<Button color='#21c11c' title={"Accept"} onPress={() => dispatch(acceptJob({ driverId, jobId: item._id }))} />
-										<Button
-											color='#C8C8C8'
-											title={"Cancel"}
-											onPress={() =>
-												dispatch(
-													updateJobStatus({
-														jobId: item._id,
-														status: STATUS.CANCELLED
-													})
-												)
-											}
-										/>
-									</View>
+									{[STATUS.NEW.name, STATUS.PENDING.name].includes(item.status) && (
+										<View style={tailwind("flex grow flex-row justify-around w-1/2")}>
+											<Button
+												color='#21c11c'
+												title="Accept"
+												onPress={() =>
+													dispatch(
+														acceptJob({
+															driverId,
+															jobId: item._id
+														})
+													)
+												}
+											/>
+											<Button
+												color='#C8C8C8'
+												title={"Cancel"}
+												onPress={() =>
+													dispatch(
+														updateJobStatus({
+															jobId: item._id,
+															status: STATUS.CANCELLED
+														})
+													)
+												}
+											/>
+										</View>
+									)}
 								</View>
-							</View>
+							</TouchableOpacity>
 						);
 					}}
 				/>

@@ -5,7 +5,7 @@ import {STATUS} from "../../../constants";
 export const setAllJobs = (state, action) => {
 	console.log("SETTING JOBS")
 	const currentJobs = action.payload.filter(({_id, status}) => [STATUS.DISPATCHING.name, STATUS.EN_ROUTE.name].includes(status))
-	const allJobs = action.payload.filter(({_id, status}) => [STATUS.NEW, STATUS.PENDING].includes(status))
+	const allJobs = action.payload.filter(({_id, status}) => status !== STATUS.CANCELLED)
 	const dismissed = action.payload.filter(({_id, status}) => status === STATUS.CANCELLED.name)
 	return {
 		currentJobs,
@@ -16,11 +16,11 @@ export const setAllJobs = (state, action) => {
 
 export const updateJob = (state, action) => {
 	console.log("UPDATING JOB")
-	const updatedJob = action.payload
+	console.log("NEW STATUS", action.payload.status);
 	return {
-		currentJobs: state.currentJobs,
-		allJobs: state.allJobs,
-		dismissed: state.dismissed
+		...state,
+		currentJobs: state.currentJobs.map(job => job._id === action.payload._id ? action.payload : job),
+		allJobs: state.allJobs.map(job => job._id === action.payload._id ? action.payload : job),
 	}
 }
 
@@ -33,6 +33,22 @@ export const removeJob = (state, action) => {
 		dismissed: [...state.dismissed, cancelledJob]
 	}
 }
+
+let timer = null;
+const startSubscription = createAction('timer/start')
+const endSubscription = createAction('timer/end')
+
+export const subscribe = createAsyncThunk('timer/start', async (driverId,{ dispatch }) => {
+	clearInterval(timer);
+	dispatch(fetchJobs(driverId));
+	timer = setInterval(() => dispatch(fetchJobs(driverId)), 5000);
+	dispatch(startSubscription);
+});
+
+export const unsubscribe = createAsyncThunk('timer/end',(_, {dispatch}) => {
+	clearInterval(timer);
+	dispatch(endSubscription)
+});
 
 export const fetchJobs = createAsyncThunk('jobs/fetch-jobs', async (driverId, {
 	dispatch,
