@@ -12,5 +12,9 @@
         "ENV_MODE": "staging"
       }
     }
+  },
+  "cli": {
+    "version": ">= 0.47.0",
+    "requireCommit": true
   }
 }
