@@ -1,0 +1,16 @@
+{
+  "build": {
+    "production": {
+      "releaseChannel": "production"
+    },
+    "development": {
+      "releaseChannel": "dev",
+      "distribution": "internal",
+      "env": {
+        "API_BASE_URL": "https://seconds-api-dev.herokuapp.com",
+        "SERVER_BASE_URL": "https://seconds-app-server-dev.herokuapp.com",
+        "ENV_MODE": "staging"
+      }
+    }
+  }
+}

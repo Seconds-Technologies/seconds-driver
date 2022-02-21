@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { REACT_APP_API_BASE_URL, REACT_APP_SERVER_BASE_URL, REACT_APP_ENV_MODE } from "@env"
+import { API_BASE_URL, SERVER_BASE_URL, ENV_MODE } from "@env"
 import {deleteKey} from "../services/keyStore";
 
 const apiAxios = axios.create({
-	baseURL: `${REACT_APP_API_BASE_URL}`,
+	baseURL: `${API_BASE_URL}`,
 });
 
 const serverAxios = axios.create({
-	baseURL: `${REACT_APP_SERVER_BASE_URL}`,
+	baseURL: `${SERVER_BASE_URL}`,
 });
 
 export async function setApiKey(token) {
@@ -41,13 +41,13 @@ export function serverCall(method, path, data =null, config = {}) {
 		return !data
 			? serverAxios[method.toLowerCase()](path, config)
 				.then(res => {
-					process.env.REACT_APP_ENV_MODE !== "production" && console.log(res.data);
+					process.env.ENV_MODE !== "production" && console.log(res.data);
 					resolve(res.data);
 				})
 				.catch(err => err.response.data.error ? reject(err.response.data.error) : reject(err.response.data))
 			: serverAxios[method.toLowerCase()](path, data, config)
 				.then(res => {
-					process.env.REACT_APP_ENV_MODE !== "production" && console.log(res.data);
+					process.env.ENV_MODE !== "production" && console.log(res.data);
 					resolve(res.data);
 				})
 				.catch(err => err.response.data.error ? reject(err.response.data.error) : reject(err.response.data));
@@ -67,20 +67,20 @@ export function apiCall(method, path, data =null, config={}){
 		return !data
 			? apiAxios[method.toLowerCase()](path, config)
 				.then(res => {
-					REACT_APP_ENV_MODE !== "production" && console.log(res.data);
+					ENV_MODE !== "production" && console.log(res.data);
 					resolve(res.data);
 				})
 				.catch(err => {
-					REACT_APP_ENV_MODE !== "production" && console.error(err);
+					ENV_MODE !== "production" && console.error(err);
 					err.response.data.error ? reject(err.response.data.error) : reject(err.response.data);
 				})
 			: apiAxios[method.toLowerCase()](path, data, config)
 				.then(res => {
-					REACT_APP_ENV_MODE !== "production" && console.log(res.data);
+					ENV_MODE !== "production" && console.log(res.data);
 					resolve(res.data);
 				})
 				.catch(err => {
-					REACT_APP_ENV_MODE !== "production" && console.error(err);
+					ENV_MODE !== "production" && console.error(err);
 					err.response.data.error ? reject(err.response.data.error) : reject(err.response.data);
 				});
 	})
