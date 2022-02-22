@@ -3,7 +3,6 @@ import {apiCall, serverCall} from "../../../api";
 import {STATUS} from "../../../constants";
 
 export const setAllJobs = (state, action) => {
-	console.log("SETTING JOBS")
 	const currentJobs = action.payload.filter(({_id, status}) => [STATUS.DISPATCHING.name, STATUS.EN_ROUTE.name].includes(status))
 	const allJobs = action.payload.filter(({_id, status}) => status !== STATUS.CANCELLED)
 	const dismissed = action.payload.filter(({_id, status}) => status === STATUS.CANCELLED.name)
@@ -15,7 +14,6 @@ export const setAllJobs = (state, action) => {
 }
 
 export const updateJob = (state, action) => {
-	console.log("UPDATING JOB")
 	console.log("NEW STATUS", action.payload.status);
 	return {
 		...state,
@@ -25,7 +23,6 @@ export const updateJob = (state, action) => {
 }
 
 export const removeJob = (state, action) => {
-	console.log("REMOVING JOB")
 	const cancelledJob = action.payload
 	return {
 		currentJobs: state.currentJobs.filter(({_id}) => _id !== cancelledJob._id),
