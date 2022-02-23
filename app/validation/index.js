@@ -13,3 +13,12 @@ export const loginSchema = Yup.object({
 	phone: Yup.string().matches(phoneRegExp2, 'Phone number is not valid').required('* Required'),
 	password: Yup.string().min(4, 'Min. 4 characters').required('Required'),
 })
+
+export const profileSchema = Yup.object({
+	firstname: Yup.string('* Required'),
+	lastname: Yup.string('* Required'),
+	email: Yup.string().email().required('* Required'),
+	phone: Yup.string().matches(phoneRegExp2, 'Phone number is not valid').required('* Required'),
+	password: Yup.string().min(8, 'Min. 8 characters'),
+	confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
+})

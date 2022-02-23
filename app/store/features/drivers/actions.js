@@ -21,6 +21,23 @@ export const setDriver = (state, action) => {
 	}
 }
 
+export const updateDriver = (state, action) => {
+	console.log(action.payload);
+	const {
+		id,
+		phone,
+		email,
+		firstname,
+		lastname,
+		status
+	} = action.payload
+	console.log("Updating driver")
+	return {
+		...state,
+		driver: {...state.driver, phone, email, firstname, lastname, status }
+	}
+}
+
 export const registerDriver = createAsyncThunk('drivers/registerDriver', async (payload, {
 	dispatch,
 	getState,
@@ -47,5 +64,18 @@ export const loginDriver = createAsyncThunk('drivers/loginDriver', async (payloa
 		console.log(e)
 		return rejectWithValue({message: e.message})
 	}
+})
 
+export const updateDriverProfile = createAsyncThunk('drivers/updateProfile', async(payload, {
+	dispatch,
+	rejectWithValue
+}) => {
+	try {
+	    const response = await serverCall('POST', '/server/main/update-driver', payload)
+		console.log(response);
+		return response;
+	} catch (err) {
+		console.log(err)
+		return rejectWithValue({message: err.message})
+	}
 })

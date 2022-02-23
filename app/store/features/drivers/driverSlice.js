@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {loginDriver, registerDriver, setDriver} from "./auth";
+import { loginDriver, registerDriver, setDriver, updateDriver, updateDriverProfile } from "./actions";
 
 const initialState = {
 	loading: false,
@@ -22,9 +22,7 @@ export const driver = createSlice({
 	initialState,
 	reducers: {
 		setDriver,
-		updateDriver: (state, action) => {
-			return {...state, ...action.payload}
-		},
+		updateDriver,
 	},
 	extraReducers: builder => {
 		builder
@@ -35,6 +33,11 @@ export const driver = createSlice({
 			})
 			.addCase(loginDriver.fulfilled, setDriver)
 			.addCase(loginDriver.rejected, (state, action) => {
+				state.loading = false
+				console.log("REJECTED:", action.payload)
+			})
+			.addCase(updateDriverProfile.fulfilled, updateDriver)
+			.addCase(updateDriverProfile.rejected, (state, action) => {
 				state.loading = false
 				console.log("REJECTED:", action.payload)
 			})

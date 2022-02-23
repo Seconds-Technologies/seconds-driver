@@ -22,9 +22,10 @@ const Task = ({ route }) => {
 			status
 		} = allJobs.find(job => job._id === jobId);
 		const {
+			description,
 			dropoffLocation: { firstName, lastName, fullAddress, email, phoneNumber, instructions }
 		} = deliveries[0];
-		return { id: _id, firstName, lastName, fullAddress, email, phoneNumber, instructions, status };
+		return { id: _id, firstName, lastName, fullAddress, email, phoneNumber, instructions, status, description };
 	}, [route, allJobs]);
 
 	const statusContainer = useMemo(
@@ -51,6 +52,9 @@ const Task = ({ route }) => {
 					<Item label={"Address"} value={currentTask.fullAddress} />
 					<Item label={"Email"} value={currentTask.email} />
 					<Item label={"Phone number"} value={currentTask.phoneNumber} />
+				</View>
+				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
+					<Item label={"Description"} value={currentTask.description} />
 				</View>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
 					<Item label={"Notes"} value={currentTask.instructions} />
@@ -81,11 +85,6 @@ const Task = ({ route }) => {
 						</Picker>
 					</View>
 				</View>
-			</View>
-			<View style={tailwind("flex items-center justify-center h-24")}>
-				<TouchableOpacity style={tailwind("w-48 bg-primary px-3 py-2 rounded-lg")}>
-					<Text style={tailwind("text-center text-white font-bold text-2xl")}>Navigate</Text>
-				</TouchableOpacity>
 			</View>
 		</View>
 	);

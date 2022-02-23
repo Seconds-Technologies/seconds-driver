@@ -15,7 +15,7 @@ const Item = ({ label, value, containerStyles }) => {
 
 Item.propTypes = {
 	label: PropTypes.string.isRequired,
-	value: PropTypes.string.isRequired,
+	value: PropTypes.string,
 	containerStyles: PropTypes.string
 };
 
