@@ -3,6 +3,10 @@ export const ENDPOINTS = {
 	API: 'api'
 }
 
+export const THEME = {
+	PRIMARY: "#9400D3"
+}
+
 export const STATUS = {
 	NEW: {
 		colour: '#F44336',

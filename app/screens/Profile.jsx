@@ -12,7 +12,6 @@ const Profile = props => {
 	const tailwind = useTailwind();
 	const dispatch = useDispatch();
 	const [successMessage, setSuccess] = useState("");
-	const [showModal, toggleModal] = useState(false);
 	const { id, firstname, lastname, phone, email, vehicle } = useSelector(state => state["drivers"].driver);
 
 	const successModal = (
@@ -26,9 +25,9 @@ const Profile = props => {
 	);
 
 	return (
-		<View style={tailwind("bg-white md:mx-32 p-4 border-0 md:border-4 border-gray-300 rounded-xl min-h-full")}>
+		<View style={tailwind("bg-white md:mx-32 pb-4 px-4 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>
 			{successModal}
-			<View style={tailwind("max-w-md bg-white rounded-xl overflow-hidden md:max-w-md p-3 my-auto")}>
+			<View style={tailwind("max-w-md bg-white rounded-xl overflow-hidden md:max-w-md p-3")}>
 				<View style={tailwind("md:flex")}>
 					<View style={tailwind("w-full p-2")}>
 						<UserAvatar size={100} name={`${firstname} ${lastname}`} />
@@ -50,14 +49,14 @@ const Profile = props => {
 							}}
 						>
 							{({ values, handleSubmit, handleChange, handleBlur }) => (
-								<View style={tailwind("relative w-full mt-10")}>
+								<View style={tailwind("relative w-full mt-6")}>
 									<View style={tailwind('flex flex-row justify-between mb-2')}>
 										<View style={{width: "48%"}}>
 											<Text style={tailwind("font-medium text-gray-900")}>First Name</Text>
 											<TextInput
 												defaultValue={firstname}
 												autoComplete={"name-given"}
-												style={tailwind("flex w-full px-4 py-4 mt-2 text-xl bg-gray-200 rounded-lg")}
+												style={tailwind("flex w-full px-4 py-3 mt-2 text-xl bg-gray-200 rounded-lg")}
 												placeholder={"Please enter your name"}
 												onChangeText={handleChange("firstname")}
 												value={values.firstname}
@@ -68,7 +67,7 @@ const Profile = props => {
 											<TextInput
 												defaultValue={lastname}
 												autoComplete={"name-family"}
-												style={tailwind("flex w-full px-4 py-4 mt-2 text-xl bg-gray-200 rounded-lg")}
+												style={tailwind("flex w-full px-4 py-3 mt-2 text-xl bg-gray-200 rounded-lg")}
 												placeholder={"Please enter your name"}
 												onChangeText={handleChange("lastname")}
 												value={values.lastname}
@@ -80,7 +79,7 @@ const Profile = props => {
 										<TextInput
 											defaultValue={email}
 											autoComplete={"email"}
-											style={tailwind("flex w-full px-4 py-4 mt-2 text-xl bg-gray-200 rounded-lg")}
+											style={tailwind("flex w-full px-4 py-3 mt-2 text-xl bg-gray-200 rounded-lg")}
 											onChangeText={handleChange("email")}
 											value={values.email}
 										/>
@@ -90,7 +89,7 @@ const Profile = props => {
 										<TextInput
 											defaultValue={phone}
 											autoComplete={"tel"}
-											style={tailwind("flex w-full px-4 py-4 mt-2 text-xl bg-gray-200 rounded-lg")}
+											style={tailwind("flex w-full px-4 py-3 mt-2 text-xl bg-gray-200 rounded-lg")}
 											onChangeText={handleChange("phone")}
 											value={values.phone}
 										/>
@@ -100,7 +99,7 @@ const Profile = props => {
 										<TextInput
 											secureTextEntry
 											autoComplete={"password-new"}
-											style={tailwind("flex w-full px-4 py-4 mt-2 text-xl bg-gray-200 rounded-lg")}
+											style={tailwind("flex w-full px-4 py-3 mt-2 text-xl bg-gray-200 rounded-lg")}
 											onChangeText={handleChange("password")}
 											value={values.password}
 										/>
@@ -110,7 +109,7 @@ const Profile = props => {
 										<TextInput
 											secureTextEntry
 											autoComplete={"password-new"}
-											style={tailwind("flex w-full px-4 py-4 mt-2 text-xl bg-gray-200 rounded-lg")}
+											style={tailwind("flex w-full px-4 py-3 mt-2 text-xl bg-gray-200 rounded-lg")}
 											onChangeText={handleChange("confirmPassword")}
 											value={values.confirmPassword}
 										/>

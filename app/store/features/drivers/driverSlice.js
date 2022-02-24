@@ -10,6 +10,7 @@ const initialState = {
 		lastname: "",
 		email: "",
 		phone: "",
+		isOnline: "",
 		businessClients: [],
 		vehicle: "",
 		status: "",

@@ -32,14 +32,13 @@
   margin-bottom: 1.5rem
 }
 
-.my-auto {
-  margin-top: auto;
-  margin-bottom: auto
-}
-
 .my-1 {
   margin-top: 0.25rem;
   margin-bottom: 0.25rem
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem
 }
 
 .mb-6 {
@@ -54,8 +53,8 @@
   margin-top: 0.75rem
 }
 
-.mt-10 {
-  margin-top: 2.5rem
+.mt-6 {
+  margin-top: 1.5rem
 }
 
 .mb-2 {
@@ -281,16 +280,22 @@
   padding: 1.25rem
 }
 
-.p-4 {
-  padding: 1rem
-}
-
 .p-3 {
   padding: 0.75rem
 }
 
 .p-2 {
   padding: 0.5rem
+}
+
+.py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem
+}
+
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem
 }
 
 .px-4 {
@@ -318,11 +323,6 @@
   padding-bottom: 1rem
 }
 
-.px-5 {
-  padding-left: 1.25rem;
-  padding-right: 1.25rem
-}
-
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem
@@ -336,8 +336,17 @@
   padding-right: 0.75rem
 }
 
+.pb-5 {
+  padding-bottom: 1.25rem
+}
+
 .text-center {
   text-align: center
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem
 }
 
 .text-3xl {
@@ -347,11 +356,6 @@
 
 .text-xl {
   font-size: 1.25rem;
-  line-height: 1.75rem
-}
-
-.text-lg {
-  font-size: 1.125rem;
   line-height: 1.75rem
 }
 
@@ -480,6 +484,10 @@
 
   .md\:items-center {
     align-items: center
+  }
+
+  .md\:rounded-xl {
+    border-radius: 0.75rem
   }
 
   .md\:border-4 {

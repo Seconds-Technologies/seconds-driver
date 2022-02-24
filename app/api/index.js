@@ -13,7 +13,6 @@ const serverAxios = axios.create({
 export async function setApiKey(token) {
 	if (token) {
 		apiAxios.defaults.headers.common['X-Seconds-Api-Key'] = token;
-		console.log(apiAxios.defaults)
 	} else {
 		delete apiAxios.defaults.headers.common['X-Seconds-Api-Key'];
 		await deleteKey("apiKey")

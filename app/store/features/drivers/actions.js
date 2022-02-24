@@ -11,13 +11,14 @@ export const setDriver = (state, action) => {
 		firstname,
 		lastname,
 		status,
+		isOnline,
 		vehicle,
 		verified
 	} = action.payload
 	console.log("Setting driver")
 	return {
 		isAuthenticated: true,
-		driver: {id, businessClients, phone, email, firstname, lastname, status, vehicle, verified}
+		driver: {id, businessClients, phone, email, firstname, lastname, status, isOnline, vehicle, verified}
 	}
 }
 
@@ -29,12 +30,13 @@ export const updateDriver = (state, action) => {
 		email,
 		firstname,
 		lastname,
-		status
+		status,
+		isOnline
 	} = action.payload
 	console.log("Updating driver")
 	return {
 		...state,
-		driver: {...state.driver, phone, email, firstname, lastname, status }
+		driver: {...state.driver, phone, email, firstname, lastname, status, isOnline }
 	}
 }
 

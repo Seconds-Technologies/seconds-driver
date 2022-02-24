@@ -45,7 +45,7 @@ const Task = ({ route }) => {
 	);
 
 	return (
-		<View style={tailwind("md:mx-32 p-5 border-0 md:border-4 border-gray-300 rounded-xl min-h-full")}>
+		<View style={tailwind("md:mx-32 pb-5 px-5 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>
 			<View style={tailwind("flex grow justify-around items-center p-2")}>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
 					<Item label={"Customer name"} value={`${currentTask.firstName} ${currentTask.lastName}`} />
