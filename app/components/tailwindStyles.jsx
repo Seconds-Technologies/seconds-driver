@@ -24,6 +24,9 @@ const tailwindStyles = (props) => {
 			<View style={tailwind('bg-cancelled-100')}>
 				<Text style={tailwind('text-lg text-cancelled-600')}>Welcome to the tailwindStyles screen!</Text>
 			</View>
+			<View style={tailwind('bg-completed-50')}>
+				<Text style={tailwind('text-lg text-completed-500')}>Welcome to the tailwindStyles screen!</Text>
+			</View>
 		</View>
 	);
 };

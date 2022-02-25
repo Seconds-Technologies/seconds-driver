@@ -1,13 +1,15 @@
-import React, { useEffect, useMemo } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import React, { useMemo } from "react";
+import { Linking, Text, TouchableOpacity, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useTailwind } from "tailwind-rn";
 import { useDispatch, useSelector } from "react-redux";
+import classNames from "classnames";
 import Item from "../components/Item";
 import { updateJobStatus } from "../store/features/jobs/actions";
 import { STATUS } from "../constants";
 import { capitalize } from "../helpers";
-import classNames from "classnames";
+import Navigate from "../components/svg/Navigate";
+import { URL } from "react-native-url-polyfill";
 
 const Task = ({ route }) => {
 	const tailwind = useTailwind();
@@ -23,9 +25,22 @@ const Task = ({ route }) => {
 		} = allJobs.find(job => job._id === jobId);
 		const {
 			description,
-			dropoffLocation: { firstName, lastName, fullAddress, email, phoneNumber, instructions }
+			dropoffLocation: { firstName, lastName, streetAddress, city, postcode, fullAddress, email, phoneNumber, instructions }
 		} = deliveries[0];
-		return { id: _id, firstName, lastName, fullAddress, email, phoneNumber, instructions, status, description };
+		return {
+			id: _id,
+			firstName,
+			lastName,
+			streetAddress,
+			city,
+			postcode,
+			fullAddress,
+			email,
+			phoneNumber,
+			instructions,
+			status,
+			description
+		};
 	}, [route, allJobs]);
 
 	const statusContainer = useMemo(
@@ -39,16 +54,37 @@ const Task = ({ route }) => {
 				"bg-en-route": currentTask.status === STATUS.EN_ROUTE.name,
 				"bg-completed": currentTask.status === STATUS.COMPLETED.name,
 				"bg-opacity-80": true,
-				"rounded": true
+				rounded: true
 			}),
 		[currentTask.status]
 	);
+
+	const navigationURL = useMemo(() => {
+		/*let baseURL = new URL("https://www.google.com/maps/dir/");
+		let params = new URLSearchParams(baseURL.search);
+		params.set("api", "1");
+		params.set("destination", `${currentTask.streetAddress}${currentTask.city}${currentTask.postcode}`);*/
+		let directionsURL = new URL("https://www.google.com/maps/dir/");
+		directionsURL.searchParams.set("api", "1");
+		directionsURL.searchParams.set("destination", `${currentTask.fullAddress}`);
+		directionsURL.searchParams.set("travelmode", "driving")
+		return directionsURL.toString();
+	}, [currentTask]);
 
 	return (
 		<View style={tailwind("md:mx-32 pb-5 px-5 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>
 			<View style={tailwind("flex grow justify-around items-center p-2")}>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
-					<Item label={"Customer name"} value={`${currentTask.firstName} ${currentTask.lastName}`} />
+					<View style={tailwind("flex flex-row justify-between")}>
+						<Item label={"Customer name"} value={`${currentTask.firstName} ${currentTask.lastName}`} />
+						<TouchableOpacity
+							activeOpacity={0.3}
+							style={tailwind("self-end mb-3")}
+							onPress={() => Linking.openURL(navigationURL)}
+						>
+							<Navigate />
+						</TouchableOpacity>
+					</View>
 					<Item label={"Address"} value={currentTask.fullAddress} />
 					<Item label={"Email"} value={currentTask.email} />
 					<Item label={"Phone number"} value={currentTask.phoneNumber} />

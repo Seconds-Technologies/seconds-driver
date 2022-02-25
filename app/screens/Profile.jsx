@@ -116,7 +116,7 @@ const Profile = props => {
 									</View>
 									<View style={tailwind("mt-8 items-center")}>
 										<TouchableOpacity
-											style={tailwind("flex items-center justify-center h-12 w-2/3 text-white text-lg bg-primary rounded")}
+											style={tailwind("flex items-center justify-center h-12 w-2/3 text-white text-lg bg-pending-400 rounded")}
 											onPress={handleSubmit}
 										>
 											<Text style={tailwind("text-white text-lg")}>Save</Text>

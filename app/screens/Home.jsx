@@ -71,7 +71,7 @@ const Home = props => {
 				renderScene={renderScene}
 				initialLayout={{ width: layout.width }}
 			/>
-			<View style={tailwind("flex items-center mb-5")}>
+			<View style={tailwind("flex items-center mb-3")}>
 				<Text style={tailwind("text-lg")}>{isOnline ? "Online" : "Offline"}</Text>
 				<SwitchToggle
 					type={0}
