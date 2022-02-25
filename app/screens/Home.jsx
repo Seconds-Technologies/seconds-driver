@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Text, useWindowDimensions, View } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +7,7 @@ import TodayTasks from "../containers/TodayTasks";
 import AllTasks from "../containers/AllTasks";
 import { subscribe, unsubscribe } from "../store/features/jobs/actions";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
-import { THEME } from "../constants";
+import { DRIVER_STATUS, JOB_STATUS, THEME } from "../constants";
 import { Badge } from "react-native-elements";
 import SwitchToggle from "react-native-switch-toggle";
 import { updateDriverProfile } from "../store/features/drivers/actions";
@@ -19,18 +19,34 @@ const Home = props => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = useState(0);
 	const { id, isOnline } = useSelector(state => state["drivers"].driver);
+	const { allJobs } = useSelector(state => state["jobs"]);
+
+	const getStatus = useCallback(
+		online => {
+			let isBusy = allJobs.some(job => [JOB_STATUS.DISPATCHING.name, JOB_STATUS.EN_ROUTE.name].includes(job.status));
+			console.log(isBusy);
+			return !online ? DRIVER_STATUS.OFFLINE : isBusy ? DRIVER_STATUS.BUSY : DRIVER_STATUS.AVAILABLE;
+		},
+		[allJobs]
+	);
 
 	const toggleSwitch = () => {
-		dispatch(updateDriverProfile({ id, isOnline: !isOnline }))
+		dispatch(
+			updateDriverProfile({
+				id,
+				isOnline: !isOnline,
+				status: getStatus(!isOnline)
+			})
+		)
 			.unwrap()
 			.then(res => console.log(res))
 			.catch(err => console.log(err.message));
 	};
+
 	const {
-		isAuthenticated,
-		driver: { id: driverId, firstname, lastname }
+		driver: { id: driverId }
 	} = useSelector(state => state["drivers"]);
-	const { completedJobs, currentJobs } = useSelector(state => state["jobs"]);
+	const { currentJobs } = useSelector(state => state["jobs"]);
 
 	const renderScene = SceneMap({
 		today: TodayTasks,

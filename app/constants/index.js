@@ -7,7 +7,7 @@ export const THEME = {
 	PRIMARY: "#9400D3"
 }
 
-export const STATUS = {
+export const JOB_STATUS = {
 	NEW: {
 		colour: '#F44336',
 		name: 'new'.toUpperCase()
@@ -37,3 +37,9 @@ export const STATUS = {
 		colour: '#795548'
 	}
 };
+
+export const DRIVER_STATUS = {
+	AVAILABLE: 'AVAILABLE',
+	BUSY: 'BUSY',
+	OFFLINE: 'OFFLINE',
+}

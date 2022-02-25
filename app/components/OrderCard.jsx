@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { capitalize, getColor } from "../helpers";
 import { useTailwind } from "tailwind-rn";
 import { useNavigation } from "@react-navigation/native";
-import { STATUS } from "../constants";
+import { JOB_STATUS } from "../constants";
 import { acceptJob, updateJobStatus } from "../store/features/jobs/actions";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -39,7 +39,7 @@ const OrderCard = ({ item, bgStyle, textStyle }) => {
 				</Text>
 			</View>
 			<View style={tailwind("pr-3 flex items-end")}>
-				{[STATUS.NEW.name, STATUS.PENDING.name].includes(item.status) ? (
+				{[JOB_STATUS.NEW.name, JOB_STATUS.PENDING.name].includes(item.status) ? (
 					<View style={tailwind("flex grow flex-row justify-around w-1/2")}>
 						<Button
 							color='#21c11c'
@@ -60,7 +60,7 @@ const OrderCard = ({ item, bgStyle, textStyle }) => {
 								dispatch(
 									updateJobStatus({
 										jobId: item._id,
-										status: STATUS.CANCELLED
+										status: JOB_STATUS.CANCELLED
 									})
 								)
 							}

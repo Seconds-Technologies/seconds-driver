@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import Item from "../components/Item";
 import { updateJobStatus } from "../store/features/jobs/actions";
-import { STATUS } from "../constants";
+import { JOB_STATUS } from "../constants";
 import { capitalize } from "../helpers";
 import Navigate from "../components/svg/Navigate";
 import { URL } from "react-native-url-polyfill";
@@ -48,11 +48,11 @@ const Task = ({ route }) => {
 			classNames({
 				"p-2": true,
 				"px-5": true,
-				"bg-new": currentTask.status === STATUS.NEW.name,
-				"bg-pending": currentTask.status === STATUS.PENDING.name,
-				"bg-dispatching": currentTask.status === STATUS.DISPATCHING.name,
-				"bg-en-route": currentTask.status === STATUS.EN_ROUTE.name,
-				"bg-completed": currentTask.status === STATUS.COMPLETED.name,
+				"bg-new": currentTask.status === JOB_STATUS.NEW.name,
+				"bg-pending": currentTask.status === JOB_STATUS.PENDING.name,
+				"bg-dispatching": currentTask.status === JOB_STATUS.DISPATCHING.name,
+				"bg-en-route": currentTask.status === JOB_STATUS.EN_ROUTE.name,
+				"bg-completed": currentTask.status === JOB_STATUS.COMPLETED.name,
 				"bg-opacity-80": true,
 				rounded: true
 			}),
@@ -113,11 +113,11 @@ const Task = ({ route }) => {
 								)
 							}
 						>
-							<Picker.Item label={capitalize(STATUS.NEW.name)} value={STATUS.NEW.name} />
-							<Picker.Item label={capitalize(STATUS.PENDING.name)} value={STATUS.PENDING.name} />
-							<Picker.Item label={capitalize(STATUS.DISPATCHING.name)} value={STATUS.DISPATCHING.name} />
-							<Picker.Item label={capitalize(STATUS.EN_ROUTE.name)} value={STATUS.EN_ROUTE.name} />
-							<Picker.Item label={capitalize(STATUS.COMPLETED.name)} value={STATUS.COMPLETED.name} />
+							<Picker.Item label={capitalize(JOB_STATUS.NEW.name)} value={JOB_STATUS.NEW.name} />
+							<Picker.Item label={capitalize(JOB_STATUS.PENDING.name)} value={JOB_STATUS.PENDING.name} />
+							<Picker.Item label={capitalize(JOB_STATUS.DISPATCHING.name)} value={JOB_STATUS.DISPATCHING.name} />
+							<Picker.Item label={capitalize(JOB_STATUS.EN_ROUTE.name)} value={JOB_STATUS.EN_ROUTE.name} />
+							<Picker.Item label={capitalize(JOB_STATUS.COMPLETED.name)} value={JOB_STATUS.COMPLETED.name} />
 						</Picker>
 					</View>
 				</View>
