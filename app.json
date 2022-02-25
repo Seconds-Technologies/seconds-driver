@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "seconds-driver",
+    "owner": "seconds-technologies",
     "slug": "seconds-driver",
     "version": "1.0.0",
     "assetBundlePatterns": [
