@@ -12,7 +12,7 @@ import loading from "../components/Loading";
 const SignatureCanvas = props => {
 	const { width, height } = useWindowDimensions();
 	const ref = useRef();
-	const [isLoading, setLoading] = useState(true);
+	const [isLoading, setLoading] = useState(false);
 	const dispatch = useDispatch();
 	const tailwind = useTailwind();
 
