@@ -50,6 +50,12 @@
 			"marginBottom": 4
 		}
 	},
+	"my-2": {
+		"style": {
+			"marginTop": 8,
+			"marginBottom": 8
+		}
+	},
 	"mb-3": {
 		"style": {
 			"marginBottom": 12

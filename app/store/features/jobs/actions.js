@@ -16,7 +16,6 @@ export const setAllJobs = (state, action) => {
 };
 
 export const updateJob = (state, action) => {
-	console.log("NEW STATUS", action.payload.status);
 	const currentJobs = state.currentJobs.map(job => (job._id === action.payload._id ? action.payload : job));
 	const completedJobs = state.allJobs
 		.map(job => job._id === action.payload._id ? action.payload : job)
@@ -81,7 +80,16 @@ export const updateJobStatus = createAsyncThunk("jobs/update-job", async ({ jobI
 		console.log(jobId, status);
 		return await serverCall("PATCH", `/server/driver/update-job`, { jobId, status });
 	} catch (err) {
-		console.log(err.message);
+		return rejectWithValue({ message: err.message });
+	}
+});
+
+export const uploadImage = createAsyncThunk("jobs/upload-proof", async ({ jobId, img, type }, { rejectWithValue }) => {
+	try {
+		const result = await serverCall("POST", `/server/driver/upload`, { jobId, img, type });
+		console.log(result);
+		return result
+	} catch (err) {
 		return rejectWithValue({ message: err.message });
 	}
 });

@@ -13,7 +13,7 @@ import { URL } from "react-native-url-polyfill";
 import DeliveryProof from "../modals/DeliveryProof";
 
 const Task = ({ navigation, route }) => {
-	const [showSignature, setShowSignature] = useState(false)
+	const [showSignature, setShowSignature] = useState(false);
 	const tailwind = useTailwind();
 	const dispatch = useDispatch();
 	const { allJobs } = useSelector(state => state["jobs"]);
@@ -29,6 +29,7 @@ const Task = ({ navigation, route }) => {
 			description,
 			dropoffLocation: { firstName, lastName, streetAddress, city, postcode, fullAddress, email, phoneNumber, instructions }
 		} = deliveries[0];
+		console.log("STATUS:", status);
 		return {
 			id: _id,
 			orderNumber,
@@ -64,9 +65,9 @@ const Task = ({ navigation, route }) => {
 
 	const navigationURL = useMemo(() => {
 		/*let baseURL = new URL("https://www.google.com/maps/dir/");
-		let params = new URLSearchParams(baseURL.search);
-		params.set("api", "1");
-		params.set("destination", `${currentTask.streetAddress}${currentTask.city}${currentTask.postcode}`);*/
+			let params = new URLSearchParams(baseURL.search);
+			params.set("api", "1");
+			params.set("destination", `${currentTask.streetAddress}${currentTask.city}${currentTask.postcode}`);*/
 		let directionsURL = new URL("https://www.google.com/maps/dir/");
 		directionsURL.searchParams.set("api", "1");
 		directionsURL.searchParams.set("destination", `${currentTask.fullAddress}`);
@@ -74,9 +75,20 @@ const Task = ({ navigation, route }) => {
 		return directionsURL.toString();
 	}, [currentTask]);
 
+	const onValueChange = (value, index) => {
+		value === JOB_STATUS.COMPLETED.name
+			? setShowSignature(true)
+			: dispatch(
+					updateJobStatus({
+						jobId: currentTask.id,
+						status: value
+					})
+			  );
+	};
+
 	return (
 		<View style={tailwind("md:mx-32 pb-5 px-5 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>
-			<DeliveryProof show={showSignature} toggleShow={() => setShowSignature(!showSignature)}/>
+			<DeliveryProof show={showSignature} onHide={() => setShowSignature(false)} jobId={currentTask.id} />
 			<View style={tailwind("flex grow justify-around items-center p-2")}>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
 					<View style={tailwind("flex flex-row justify-between")}>
@@ -100,23 +112,7 @@ const Task = ({ navigation, route }) => {
 						<Text style={tailwind("text-white text-center text-lg")}>{capitalize(currentTask.status)}</Text>
 					</View>
 					<View style={tailwind("ml-1 flex justify-center")}>
-						<Picker
-							mode='dialog'
-							style={tailwind("w-32 h-8")}
-							selectedValue={currentTask.status}
-							onValueChange={(value, index) => {
-								if (value === JOB_STATUS.COMPLETED.name){
-									setShowSignature(true)
-								} else {
-									dispatch(
-										updateJobStatus({
-											jobId: currentTask.id,
-											status: value
-										})
-									);
-								}
-							}}
-						>
+						<Picker mode='dialog' style={tailwind("w-32 h-8")} selectedValue={currentTask.status} onValueChange={onValueChange}>
 							<Picker.Item label={capitalize(JOB_STATUS.NEW.name)} value={JOB_STATUS.NEW.name} />
 							<Picker.Item label={capitalize(JOB_STATUS.PENDING.name)} value={JOB_STATUS.PENDING.name} />
 							<Picker.Item label={capitalize(JOB_STATUS.DISPATCHING.name)} value={JOB_STATUS.DISPATCHING.name} />
@@ -129,5 +125,4 @@ const Task = ({ navigation, route }) => {
 		</View>
 	);
 };
-
 export default Task;
