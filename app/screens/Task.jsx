@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Linking, Text, TouchableOpacity, View } from "react-native";
+import { BackHandler, Linking, Text, TouchableOpacity, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useTailwind } from "tailwind-rn";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,9 +11,12 @@ import { capitalize } from "../helpers";
 import Navigate from "../components/svg/Navigate";
 import { URL } from "react-native-url-polyfill";
 import DeliveryProof from "../modals/DeliveryProof";
+import CameraCanvas from "../containers/CameraCanvas";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Task = ({ navigation, route }) => {
 	const [showSignature, setShowSignature] = useState(false);
+	const [isCamera, setIsCamera] = useState(false);
 	const tailwind = useTailwind();
 	const dispatch = useDispatch();
 	const { allJobs } = useSelector(state => state["jobs"]);
@@ -75,20 +78,20 @@ const Task = ({ navigation, route }) => {
 		return directionsURL.toString();
 	}, [currentTask]);
 
-	const onValueChange = (value, index) => {
+	const onValueChange = async (value, index) => {
 		value === JOB_STATUS.COMPLETED.name
 			? setShowSignature(true)
-			: dispatch(
+			: await dispatch(
 					updateJobStatus({
 						jobId: currentTask.id,
 						status: value
 					})
-			  );
+			  ).unwrap();
 	};
 
 	return (
 		<View style={tailwind("md:mx-32 pb-5 px-5 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>
-			<DeliveryProof show={showSignature} onHide={() => setShowSignature(false)} jobId={currentTask.id} />
+			<DeliveryProof show={showSignature} onHide={() => setShowSignature(false)} jobId={currentTask.id} orderNumber={currentTask.orderNumber} />
 			<View style={tailwind("flex grow justify-around items-center p-2")}>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
 					<View style={tailwind("flex flex-row justify-between")}>

@@ -4,7 +4,8 @@ export const ENDPOINTS = {
 }
 
 export const THEME = {
-	PRIMARY: "#9400D3"
+	PRIMARY: "#9400D3",
+	SECONDARY: "#C9C9C9"
 }
 
 export const JOB_STATUS = {

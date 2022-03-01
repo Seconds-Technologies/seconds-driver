@@ -86,9 +86,19 @@ export const updateJobStatus = createAsyncThunk("jobs/update-job", async ({ jobI
 
 export const uploadImage = createAsyncThunk("jobs/upload-proof", async ({ jobId, img, type }, { rejectWithValue }) => {
 	try {
-		const result = await serverCall("POST", `/server/driver/upload`, { jobId, img, type });
-		console.log(result);
-		return result
+		if (type === "photo") {
+			const formData = new FormData()
+			formData.append('img', img)
+			formData.append("jobId", jobId)
+			formData.append("type", type)
+			const result = await serverCall("POST", `/server/driver/upload-photo`, formData);
+			console.log(result);
+			return result
+		}  else {
+			const result = await serverCall("POST", `/server/driver/upload-signature`, { jobId, img, type });
+			console.log(result);
+			return result
+		}
 	} catch (err) {
 		return rejectWithValue({ message: err.message });
 	}

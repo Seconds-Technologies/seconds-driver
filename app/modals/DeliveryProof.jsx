@@ -8,18 +8,12 @@ import Camera from "../components/svg/Camera";
 import { useNavigation } from "@react-navigation/native";
 import PropTypes from "prop-types";
 
-const DeliveryProof = ({ show, onHide, jobId }) => {
+const DeliveryProof = ({ show, onHide, jobId, orderNumber }) => {
 	const tailwind = useTailwind();
 	const navigation = useNavigation();
 
 	return (
-		<Modal
-			isVisible={show}
-			onBackdropPress={onHide}
-			onBackButtonPress={onHide}
-			style={styles.container}
-			backdropOpacity={0.8}
-		>
+		<Modal isVisible={show} onBackdropPress={onHide} onBackButtonPress={onHide} style={styles.container} backdropOpacity={0.8}>
 			<View style={tailwind("flex flex-row justify-around items-center")}>
 				<View style={tailwind("flex items-center")}>
 					<TouchableOpacity style={tailwind("mb-2 p-5 flex items-center justify-center bg-white rounded-full")}>
@@ -28,7 +22,10 @@ const DeliveryProof = ({ show, onHide, jobId }) => {
 					<Text style={tailwind("text-white")}>Comment</Text>
 				</View>
 				<View style={tailwind("flex items-center")}>
-					<TouchableOpacity style={tailwind("mb-2 p-5 bg-white rounded-full flex items-center justify-center")}>
+					<TouchableOpacity
+						style={tailwind("mb-2 p-5 bg-white rounded-full flex items-center justify-center")}
+						onPress={() => navigation.navigate("Photo", {jobId, orderNumber})}
+					>
 						<Camera width={41} height={31} />
 					</TouchableOpacity>
 					<Text style={tailwind("text-white")}>Take Photo</Text>
@@ -71,7 +68,8 @@ const styles = StyleSheet.create({
 DeliveryProof.propTypes = {
 	show: PropTypes.bool.isRequired,
 	onHide: PropTypes.func.isRequired,
-	jobId: PropTypes.string.isRequired
-}
+	jobId: PropTypes.string.isRequired,
+	orderNumber: PropTypes.string.isRequired
+};
 
 export default DeliveryProof;

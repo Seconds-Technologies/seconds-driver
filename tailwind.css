@@ -22,6 +22,10 @@
   margin: 2.5rem
 }
 
+.m-0 {
+  margin: 0px
+}
+
 .my-5 {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem
@@ -40,6 +44,16 @@
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem
+}
+
+.mx-3 {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem
+}
+
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem
 }
 
 .mb-3 {
@@ -118,8 +132,20 @@
   width: 50%
 }
 
+.w-16 {
+  width: 4rem
+}
+
+.w-24 {
+  width: 6rem
+}
+
 .max-w-md {
   max-width: 28rem
+}
+
+.flex-1 {
+  flex: 1 1 0%
 }
 
 .grow {
@@ -136,6 +162,10 @@
 
 .items-center {
   align-items: center
+}
+
+.justify-start {
+  justify-content: flex-start
 }
 
 .justify-end {
@@ -299,6 +329,10 @@
 
 .p-2 {
   padding: 0.5rem
+}
+
+.p-0 {
+  padding: 0px
 }
 
 .py-5 {

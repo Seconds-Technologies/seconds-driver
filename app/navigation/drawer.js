@@ -13,13 +13,13 @@ const DrawerScreen = props => {
 	return (
 		<Drawer.Navigator
 			drawerContent={props => <CustomDrawer {...props} />}
-			screenOptions={{
+			screenOptions={() => ({
 				headerStyle: {
 					height: 80
 				},
 				headerBackground: () => <View style={StyleSheet.absoluteFill} />
-			}}
-			screenListeners={({ route, navigation }) => ({
+			})}
+			screenListeners={({ route, navigation, options }) => ({
 				state: ({ data }) => {
 					let routes = data.state.routes;
 					routes.find(item => {
@@ -43,7 +43,7 @@ const DrawerScreen = props => {
 							}
 						}
 					});
-				}
+				},
 			})}
 			initialRouteName='Orders'
 		>
