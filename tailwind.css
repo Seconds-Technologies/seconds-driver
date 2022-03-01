@@ -173,6 +173,10 @@
   border-radius: 0.5rem
 }
 
+.rounded-full {
+  border-radius: 9999px
+}
+
 .border-0 {
   border-width: 0px
 }

@@ -15,15 +15,16 @@ export async function setApiKey(token) {
 		apiAxios.defaults.headers.common['X-Seconds-Api-Key'] = token;
 	} else {
 		delete apiAxios.defaults.headers.common['X-Seconds-Api-Key'];
-		await deleteKey("apiKey")
+		await deleteKey("credentials")
 	}
 }
 
-export function setTokenHeader(token) {
+export async function setTokenHeader(token) {
 	if (token) {
 		serverAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 	} else {
 		delete serverAxios.defaults.headers.common['Authorization'];
+		await deleteKey("credentials")
 	}
 }
 

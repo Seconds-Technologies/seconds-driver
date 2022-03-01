@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Linking, Text, TouchableOpacity, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useTailwind } from "tailwind-rn";
@@ -10,25 +10,28 @@ import { JOB_STATUS } from "../constants";
 import { capitalize } from "../helpers";
 import Navigate from "../components/svg/Navigate";
 import { URL } from "react-native-url-polyfill";
+import DeliveryProof from "../modals/DeliveryProof";
 
-const Task = ({ route }) => {
+const Task = ({ navigation, route }) => {
+	const [showSignature, setShowSignature] = useState(false)
 	const tailwind = useTailwind();
 	const dispatch = useDispatch();
 	const { allJobs } = useSelector(state => state["jobs"]);
 
 	const currentTask = useMemo(() => {
-		const jobId = route.key;
+		const orderNumber = route.key;
 		let {
 			_id,
 			jobSpecification: { deliveries },
 			status
-		} = allJobs.find(job => job._id === jobId);
+		} = allJobs.find(job => job["jobSpecification"]["orderNumber"] === orderNumber);
 		const {
 			description,
 			dropoffLocation: { firstName, lastName, streetAddress, city, postcode, fullAddress, email, phoneNumber, instructions }
 		} = deliveries[0];
 		return {
 			id: _id,
+			orderNumber,
 			firstName,
 			lastName,
 			streetAddress,
@@ -67,21 +70,18 @@ const Task = ({ route }) => {
 		let directionsURL = new URL("https://www.google.com/maps/dir/");
 		directionsURL.searchParams.set("api", "1");
 		directionsURL.searchParams.set("destination", `${currentTask.fullAddress}`);
-		directionsURL.searchParams.set("travelmode", "driving")
+		directionsURL.searchParams.set("travelmode", "driving");
 		return directionsURL.toString();
 	}, [currentTask]);
 
 	return (
 		<View style={tailwind("md:mx-32 pb-5 px-5 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>
+			<DeliveryProof show={showSignature} toggleShow={() => setShowSignature(!showSignature)}/>
 			<View style={tailwind("flex grow justify-around items-center p-2")}>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
 					<View style={tailwind("flex flex-row justify-between")}>
 						<Item label={"Customer name"} value={`${currentTask.firstName} ${currentTask.lastName}`} />
-						<TouchableOpacity
-							activeOpacity={0.3}
-							style={tailwind("self-end mb-3")}
-							onPress={() => Linking.openURL(navigationURL)}
-						>
+						<TouchableOpacity activeOpacity={0.3} style={tailwind("self-end mb-3")} onPress={() => Linking.openURL(navigationURL)}>
 							<Navigate />
 						</TouchableOpacity>
 					</View>
@@ -104,14 +104,18 @@ const Task = ({ route }) => {
 							mode='dialog'
 							style={tailwind("w-32 h-8")}
 							selectedValue={currentTask.status}
-							onValueChange={(value, index) =>
-								dispatch(
-									updateJobStatus({
-										jobId: currentTask.id,
-										status: value
-									})
-								)
-							}
+							onValueChange={(value, index) => {
+								if (value === JOB_STATUS.COMPLETED.name){
+									setShowSignature(true)
+								} else {
+									dispatch(
+										updateJobStatus({
+											jobId: currentTask.id,
+											status: value
+										})
+									);
+								}
+							}}
 						>
 							<Picker.Item label={capitalize(JOB_STATUS.NEW.name)} value={JOB_STATUS.NEW.name} />
 							<Picker.Item label={capitalize(JOB_STATUS.PENDING.name)} value={JOB_STATUS.PENDING.name} />

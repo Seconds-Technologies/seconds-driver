@@ -1,6 +1,12 @@
 module.exports = {
 	corePlugins: require("tailwind-rn/unsupported-core-plugins"),
-	content: ["./App.js", "./app/screens/**/*.{js,jsx}", "./app/components/**/*.{js,jsx}", "./app/containers/**/*.{js,jsx}"],
+	content: [
+		"./App.js",
+		"./app/screens/**/*.{js,jsx}",
+		"./app/components/**/*.{js,jsx}",
+		"./app/containers/**/*.{js,jsx}",
+		"./app/modals/**/*.{js,jsx}"
+	],
 	theme: {
 		extend: {
 			opacity: {

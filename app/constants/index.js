@@ -9,8 +9,8 @@ export const THEME = {
 
 export const JOB_STATUS = {
 	NEW: {
-		colour: '#F44336',
-		name: 'new'.toUpperCase()
+		name: 'new'.toUpperCase(),
+		colour: '#F44336'
 	},
 	PENDING: {
 		name: 'pending'.toUpperCase(),

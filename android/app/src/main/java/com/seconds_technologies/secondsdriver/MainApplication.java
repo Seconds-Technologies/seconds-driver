@@ -1,22 +1,16 @@
-package com.secondsdriver;
+package com.seconds_technologies.secondsdriver;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import androidx.annotation.NonNull;
-
-import com.facebook.react.PackageList;
-import com.facebook.react.ReactApplication;
-import com.facebook.react.ReactInstanceManager;
-import com.facebook.react.ReactNativeHost;
-import com.facebook.react.ReactPackage;
+import com.facebook.react.*;
+import com.facebook.react.bridge.JSIModulePackage;
 import com.facebook.soloader.SoLoader;
-
+import com.seconds_technologies.secondsdriver.BuildConfig;
+import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 import expo.modules.ApplicationLifecycleDispatcher;
 import expo.modules.ReactNativeHostWrapper;
-
-import com.facebook.react.bridge.JSIModulePackage;
-import com.swmansion.reanimated.ReanimatedJSIModulePackage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -85,7 +79,7 @@ public class MainApplication extends Application implements ReactApplication {
          We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
-				Class<?> aClass = Class.forName("com.secondsdriver.ReactNativeFlipper");
+				Class<?> aClass = Class.forName("com.seconds_technologies.secondsdriver.ReactNativeFlipper");
 				aClass
 						.getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
 						.invoke(null, context, reactInstanceManager);

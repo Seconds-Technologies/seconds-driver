@@ -19,7 +19,7 @@ const OrderCard = ({ item, bgStyle, textStyle }) => {
 		<TouchableOpacity
 			activeOpacity={0.9}
 			style={tailwind("pb-4 border border-gray-300")}
-			onPress={() => navigation.navigate({ name: "Task", key: item._id })}
+			onPress={() => navigation.navigate({ name: "Task", key: item["jobSpecification"]["orderNumber"] })}
 		>
 			<View
 				style={{

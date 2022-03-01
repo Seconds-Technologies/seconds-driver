@@ -232,6 +232,14 @@
 			"borderBottomLeftRadius": 8
 		}
 	},
+	"rounded-full": {
+		"style": {
+			"borderTopLeftRadius": 9999,
+			"borderTopRightRadius": 9999,
+			"borderBottomRightRadius": 9999,
+			"borderBottomLeftRadius": 9999
+		}
+	},
 	"border-0": {
 		"style": {
 			"borderTopWidth": 0,
