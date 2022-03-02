@@ -91,8 +91,8 @@ const SignatureCanvas = props => {
 				onEmpty={handleEmpty}
 				onClear={handleClear}
 				onGetData={handleData}
-				autoClear={true}
-				imageType="image/jpeg"
+				autoClear={false}
+				imageType="image/png"
 				webStyle={`
                 .m-signature-pad {
                   flex: 1;

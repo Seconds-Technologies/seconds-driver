@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Text, StatusBar, View, StyleSheet, Dimensions, Image, TouchableOpacity, Button, Alert } from "react-native";
-import PropTypes from "prop-types";
+import { Alert, Button, Dimensions, Image, StatusBar, StyleSheet, Text, View } from "react-native";
 import { Camera } from "expo-camera";
 import CameraToolbar from "../components/CameraToolbar";
 import { useTailwind } from "tailwind-rn";
 import { JOB_STATUS, THEME } from "../constants";
 import { useDispatch } from "react-redux";
-import { updateJobStatus, uploadImage } from "../store/features/jobs/actions";
+import { updateJobStatus } from "../store/features/jobs/actions";
 import * as FileSystem from "expo-file-system";
 import { SERVER_BASE_URL } from "@env";
 import LoadingSpinner from "../modals/LoadingSpinner";
