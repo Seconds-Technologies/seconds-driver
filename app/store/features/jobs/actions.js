@@ -1,4 +1,4 @@
-import { createAsyncThunk, createAction } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiCall, serverCall } from "../../../api";
 import { JOB_STATUS } from "../../../constants";
 
@@ -18,7 +18,7 @@ export const setAllJobs = (state, action) => {
 export const updateJob = (state, action) => {
 	const currentJobs = state.currentJobs.map(job => (job._id === action.payload._id ? action.payload : job));
 	const completedJobs = state.allJobs
-		.map(job => job._id === action.payload._id ? action.payload : job)
+		.map(job => (job._id === action.payload._id ? action.payload : job))
 		.filter(job => job.status === JOB_STATUS.COMPLETED);
 	const allJobs = state.allJobs.map(job => (job._id === action.payload._id ? action.payload : job));
 	return {
@@ -87,18 +87,26 @@ export const updateJobStatus = createAsyncThunk("jobs/update-job", async ({ jobI
 export const uploadImage = createAsyncThunk("jobs/upload-proof", async ({ jobId, img, type }, { rejectWithValue }) => {
 	try {
 		if (type === "photo") {
-			const formData = new FormData()
-			formData.append('img', img)
-			formData.append("jobId", jobId)
-			formData.append("type", type)
+			const formData = new FormData();
+			formData.append("img", img);
+			formData.append("jobId", jobId);
+			formData.append("type", type);
 			const result = await serverCall("POST", `/server/driver/upload-photo`, formData);
 			console.log(result);
-			return result
-		}  else {
+			return result;
+		} else {
 			const result = await serverCall("POST", `/server/driver/upload-signature`, { jobId, img, type });
 			console.log(result);
-			return result
+			return result;
 		}
+	} catch (err) {
+		return rejectWithValue({ message: err.message });
+	}
+});
+
+export const downloadDeliveryPhoto = createAsyncThunk("jobs/download-proof", async (filename, { rejectWithValue }) => {
+	try {
+		return await serverCall("POST", `/server/driver/download-photo`, { filename });
 	} catch (err) {
 		return rejectWithValue({ message: err.message });
 	}

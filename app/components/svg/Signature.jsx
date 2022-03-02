@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 
 const Signature = ({ height=35, width=30, ...props }) => (
 	<Svg
-		width={height}
-		height={width}
+		width={width}
+		height={height}
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
 		{...props}

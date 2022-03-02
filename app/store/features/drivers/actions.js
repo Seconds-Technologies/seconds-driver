@@ -1,26 +1,15 @@
-import {createAsyncThunk} from '@reduxjs/toolkit';
-import {apiCall, serverCall, setApiKey, setTokenHeader} from "../../../api";
-import {saveKey} from "../../../services/keyStore";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { serverCall, setApiKey, setTokenHeader } from "../../../api";
+import { saveKey } from "../../../services/keyStore";
 
 export const setDriver = (state, action) => {
-	const {
-		id,
-		clientIds: businessClients,
-		phone,
-		email,
-		firstname,
-		lastname,
-		status,
-		isOnline,
-		vehicle,
-		verified
-	} = action.payload
-	console.log("Setting driver")
+	const { id, clientIds: businessClients, phone, email, firstname, lastname, status, isOnline, vehicle, verified } = action.payload;
+	console.log("Setting driver");
 	return {
 		isAuthenticated: true,
-		driver: {id, businessClients, phone, email, firstname, lastname, status, isOnline, vehicle, verified}
-	}
-}
+		driver: { id, businessClients, phone, email, firstname, lastname, status, isOnline, vehicle, verified }
+	};
+};
 
 export const updateDriver = (state, action) => {
 	console.log(action.payload);
@@ -73,9 +62,7 @@ export const updateDriverProfile = createAsyncThunk('drivers/updateProfile', asy
 	rejectWithValue
 }) => {
 	try {
-	    const response = await serverCall('POST', '/server/main/update-driver', payload)
-		console.log(response);
-		return response;
+		return await serverCall('POST', '/server/main/update-driver', payload);
 	} catch (err) {
 		console.log(err)
 		return rejectWithValue({message: err.message})

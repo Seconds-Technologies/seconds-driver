@@ -1,5 +1,14 @@
 import {createSlice} from '@reduxjs/toolkit'
-import { acceptJob, fetchJobs, removeJob, setAllJobs, updateJob, updateJobStatus, uploadImage } from "./actions";
+import {
+	acceptJob,
+	downloadDeliveryPhoto,
+	fetchJobs,
+	removeJob,
+	setAllJobs,
+	updateJob,
+	updateJobStatus,
+	uploadImage
+} from "./actions";
 import { JOB_STATUS } from "../../../constants";
 
 const initialState = {

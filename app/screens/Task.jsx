@@ -16,7 +16,6 @@ import { useFocusEffect } from "@react-navigation/native";
 
 const Task = ({ navigation, route }) => {
 	const [showSignature, setShowSignature] = useState(false);
-	const [isCamera, setIsCamera] = useState(false);
 	const tailwind = useTailwind();
 	const dispatch = useDispatch();
 	const { allJobs } = useSelector(state => state["jobs"]);
@@ -25,14 +24,17 @@ const Task = ({ navigation, route }) => {
 		const orderNumber = route.key;
 		let {
 			_id,
-			jobSpecification: { deliveries },
+			driverInformation: { pickedUpAt, deliveredAt },
+			jobSpecification: { pickupStartTime, pickupEndTime, deliveries },
 			status
 		} = allJobs.find(job => job["jobSpecification"]["orderNumber"] === orderNumber);
 		const {
 			description,
-			dropoffLocation: { firstName, lastName, streetAddress, city, postcode, fullAddress, email, phoneNumber, instructions }
+			dropoffLocation: { firstName, lastName, streetAddress, city, postcode, fullAddress, email, phoneNumber, instructions },
+			dropoffStartTime,
+			dropoffEndTime,
+			proofOfDelivery
 		} = deliveries[0];
-		console.log("STATUS:", status);
 		return {
 			id: _id,
 			orderNumber,
@@ -46,7 +48,12 @@ const Task = ({ navigation, route }) => {
 			phoneNumber,
 			instructions,
 			status,
-			description
+			description,
+			pickupStartTime,
+			dropoffEndTime,
+			pickedUpAt,
+			deliveredAt,
+			proofOfDelivery
 		};
 	}, [route, allJobs]);
 
@@ -59,7 +66,7 @@ const Task = ({ navigation, route }) => {
 				"bg-pending": currentTask.status === JOB_STATUS.PENDING.name,
 				"bg-dispatching": currentTask.status === JOB_STATUS.DISPATCHING.name,
 				"bg-en-route": currentTask.status === JOB_STATUS.EN_ROUTE.name,
-				"bg-completed": currentTask.status === JOB_STATUS.COMPLETED.name,
+				"bg-completed-400": currentTask.status === JOB_STATUS.COMPLETED.name,
 				"bg-opacity-80": true,
 				rounded: true
 			}),
@@ -110,20 +117,51 @@ const Task = ({ navigation, route }) => {
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
 					<Item label={"Notes"} value={currentTask.instructions} />
 				</View>
-				<View style={tailwind("flex flex-row justify-between bg-white w-full p-5 rounded-lg")}>
-					<View style={tailwind(statusContainer)}>
-						<Text style={tailwind("text-white text-center text-lg")}>{capitalize(currentTask.status)}</Text>
+				{currentTask.status !== JOB_STATUS.COMPLETED.name ? (
+					<View style={tailwind("flex flex-row justify-center bg-white w-full p-5 rounded-lg")}>
+						<View style={tailwind(`${statusContainer} text-white ml-1 flex justify-center items-center`)}>
+							<Picker
+								mode='dialog'
+								numberOfLines={1}
+								style={tailwind(`text-white w-48 h-8`)}
+								selectedValue={currentTask.status}
+								onValueChange={onValueChange}
+							>
+								<Picker.Item label={capitalize(JOB_STATUS.NEW.name)} value={JOB_STATUS.NEW.name} style={tailwind("text-lg")} />
+								<Picker.Item
+									label={capitalize(JOB_STATUS.PENDING.name)}
+									value={JOB_STATUS.PENDING.name}
+									style={tailwind("text-lg")}
+								/>
+								<Picker.Item
+									label={capitalize(JOB_STATUS.DISPATCHING.name)}
+									value={JOB_STATUS.DISPATCHING.name}
+									style={tailwind("text-lg")}
+								/>
+								<Picker.Item
+									label={capitalize(JOB_STATUS.EN_ROUTE.name)}
+									value={JOB_STATUS.EN_ROUTE.name}
+									style={tailwind("text-lg")}
+								/>
+								<Picker.Item
+									label={capitalize(JOB_STATUS.COMPLETED.name)}
+									value={JOB_STATUS.COMPLETED.name}
+									style={tailwind("text-lg")}
+								/>
+							</Picker>
+						</View>
 					</View>
-					<View style={tailwind("ml-1 flex justify-center")}>
-						<Picker mode='dialog' style={tailwind("w-32 h-8")} selectedValue={currentTask.status} onValueChange={onValueChange}>
-							<Picker.Item label={capitalize(JOB_STATUS.NEW.name)} value={JOB_STATUS.NEW.name} />
-							<Picker.Item label={capitalize(JOB_STATUS.PENDING.name)} value={JOB_STATUS.PENDING.name} />
-							<Picker.Item label={capitalize(JOB_STATUS.DISPATCHING.name)} value={JOB_STATUS.DISPATCHING.name} />
-							<Picker.Item label={capitalize(JOB_STATUS.EN_ROUTE.name)} value={JOB_STATUS.EN_ROUTE.name} />
-							<Picker.Item label={capitalize(JOB_STATUS.COMPLETED.name)} value={JOB_STATUS.COMPLETED.name} />
-						</Picker>
+				) : (
+					<View style={tailwind("flex w-full items-center")}>
+						<TouchableOpacity
+							activeOpacity={0.6}
+							style={tailwind("flex flex-row px-5 py-3 justify-center w-7/12 bg-primary/[.60] rounded-xl")}
+							onPress={() => navigation.navigate("Receipt", currentTask)}
+						>
+							<Text style={tailwind("text-lg font-bold")}>Proof of Delivery</Text>
+						</TouchableOpacity>
 					</View>
-				</View>
+				)}
 			</View>
 		</View>
 	);

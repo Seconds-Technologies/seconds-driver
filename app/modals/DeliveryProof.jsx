@@ -16,26 +16,26 @@ const DeliveryProof = ({ show, onHide, jobId, orderNumber }) => {
 		<Modal isVisible={show} onBackdropPress={onHide} onBackButtonPress={onHide} style={styles.container} backdropOpacity={0.8}>
 			<View style={tailwind("flex flex-row justify-around items-center")}>
 				<View style={tailwind("flex items-center")}>
-					<TouchableOpacity style={tailwind("mb-2 p-5 flex items-center justify-center bg-white rounded-full")}>
-						<Comment width={30} height={35} />
-					</TouchableOpacity>
-					<Text style={tailwind("text-white")}>Comment</Text>
-				</View>
-				<View style={tailwind("flex items-center")}>
 					<TouchableOpacity
 						style={tailwind("mb-2 p-5 bg-white rounded-full flex items-center justify-center")}
-						onPress={() => navigation.navigate("Photo", {jobId, orderNumber})}
+						onPress={() => {
+							onHide()
+							navigation.navigate("Photo", {jobId, orderNumber})
+						}}
 					>
-						<Camera width={41} height={31} />
+						<Camera width={40} height={40} />
 					</TouchableOpacity>
 					<Text style={tailwind("text-white")}>Take Photo</Text>
 				</View>
 				<View style={tailwind("flex items-center py-4")}>
 					<TouchableOpacity
 						style={tailwind("mb-2 p-5 bg-white rounded-full flex items-center justify-center")}
-						onPress={() => navigation.navigate("Signature", { jobId })}
+						onPress={() => {
+							onHide()
+							navigation.navigate("Signature", { jobId })
+						}}
 					>
-						<Signature height={30} width={35} />
+						<Signature width={40} height={40} />
 					</TouchableOpacity>
 					<Text style={tailwind("text-white")}>Signature</Text>
 				</View>

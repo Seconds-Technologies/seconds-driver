@@ -3,11 +3,9 @@ import SignatureScreen from "react-native-signature-canvas";
 import { useDispatch } from "react-redux";
 import { updateJobStatus, uploadImage } from "../store/features/jobs/actions";
 import { JOB_STATUS } from "../constants";
-import { ActivityIndicator, Alert, StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { Alert, StyleSheet, useWindowDimensions, View } from "react-native";
 import LoadingSpinner from "../modals/LoadingSpinner";
 import { useTailwind } from "tailwind-rn";
-import Modal from "react-native-modal";
-import loading from "../components/Loading";
 
 const SignatureCanvas = props => {
 	const { width, height } = useWindowDimensions();
@@ -59,7 +57,7 @@ const SignatureCanvas = props => {
 	// Called after ref.current.getData()
 	const handleData = data => {};
 
-	const loadingModal = (
+	/*const loadingModal = (
 		<Modal isVisible={isLoading} onBackdropPress={() => setLoading(false)} onBackButtonPress={() => setLoading(false)}>
 			<View
 				style={{
@@ -80,7 +78,7 @@ const SignatureCanvas = props => {
 				</View>
 			</View>
 		</Modal>
-	);
+	);*/
 
 	return (
 		<View style={tailwind("bg-white md:mx-32 pb-4 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>
