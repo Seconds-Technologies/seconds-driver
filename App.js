@@ -7,8 +7,15 @@ import store, { persistor } from "./app/store";
 import { PersistGate } from "redux-persist/integration/react";
 import AppNavigator from "./app/navigation/AppNavigator";
 import { THEME } from "./app/constants";
+import * as Sentry from "@sentry/react-native";
 
-export default function App() {
+Sentry.init({
+	dsn: "https://036eecf499404481a966cf1799bd435b@o1163923.ingest.sentry.io/6252556",
+	enableInExpoDevelopment: true,
+	debug: true // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+});
+
+const App = () => {
 	const MyTheme = {
 		...DefaultTheme,
 		colors: {
@@ -28,4 +35,6 @@ export default function App() {
 			</PersistGate>
 		</Provider>
 	);
-}
+};
+
+export default Sentry.wrap(App);
