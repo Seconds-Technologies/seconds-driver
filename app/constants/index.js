@@ -1,3 +1,5 @@
+export const TASK_FETCH_LOCATION = "TASK_FETCH_LOCATION";
+
 export const ENDPOINTS = {
 	SERVER: 'server',
 	API: 'api'

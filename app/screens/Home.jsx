@@ -7,10 +7,12 @@ import TodayTasks from "../containers/TodayTasks";
 import AllTasks from "../containers/AllTasks";
 import { subscribe, unsubscribe } from "../store/features/jobs/actions";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
-import { DRIVER_STATUS, JOB_STATUS, THEME } from "../constants";
+import { DRIVER_STATUS, JOB_STATUS, TASK_FETCH_LOCATION, THEME } from "../constants";
 import { Badge } from "react-native-elements";
 import SwitchToggle from "react-native-switch-toggle";
 import { updateDriverProfile } from "../store/features/drivers/actions";
+import * as Location from "expo-location";
+import { pushLocationUpdates, stopLocationUpdates } from "../helpers";
 
 const Home = props => {
 	const tailwind = useTailwind();
@@ -18,13 +20,16 @@ const Home = props => {
 	const isFocused = useIsFocused();
 	const layout = useWindowDimensions();
 	const [index, setIndex] = useState(0);
-	const { id, isOnline } = useSelector(state => state["drivers"].driver);
-	const { allJobs } = useSelector(state => state["jobs"]);
+	const {
+		isAuthenticated,
+		driver: { id: driverId, isOnline }
+	} = useSelector(state => state["drivers"]);
+	const { allJobs, currentJobs } = useSelector(state => state["jobs"]);
+	const { backgroundLocation } = useSelector(state => state["permissions"]);
 
 	const getStatus = useCallback(
 		online => {
 			let isBusy = allJobs.some(job => [JOB_STATUS.DISPATCHING.name, JOB_STATUS.EN_ROUTE.name].includes(job.status));
-			console.log(isBusy);
 			return !online ? DRIVER_STATUS.OFFLINE : isBusy ? DRIVER_STATUS.BUSY : DRIVER_STATUS.AVAILABLE;
 		},
 		[allJobs]
@@ -33,20 +38,22 @@ const Home = props => {
 	const toggleSwitch = () => {
 		dispatch(
 			updateDriverProfile({
-				id,
+				id: driverId,
 				isOnline: !isOnline,
 				status: getStatus(!isOnline)
 			})
 		)
 			.unwrap()
-			.then(res => console.log(res))
+			.then(({ isOnline }) => {
+				console.log("isOnline:", isOnline);
+				if (backgroundLocation && isOnline) {
+					pushLocationUpdates();
+				} else {
+					stopLocationUpdates();
+				}
+			})
 			.catch(err => console.log(err.message));
 	};
-
-	const {
-		driver: { id: driverId }
-	} = useSelector(state => state["drivers"]);
-	const { currentJobs } = useSelector(state => state["jobs"]);
 
 	const renderScene = SceneMap({
 		today: TodayTasks,

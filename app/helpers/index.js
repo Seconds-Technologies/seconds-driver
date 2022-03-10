@@ -1,4 +1,5 @@
-import { JOB_STATUS } from "../constants";
+import { JOB_STATUS, TASK_FETCH_LOCATION } from "../constants";
+import * as Location from "expo-location";
 
 export const getColor = status => {
 	switch (status) {
@@ -20,7 +21,26 @@ export const getColor = status => {
 };
 
 export function capitalize(str) {
-	let start = str[0].toUpperCase()
-	const lower = str.slice(1).toLowerCase()
+	let start = str[0].toUpperCase();
+	const lower = str.slice(1).toLowerCase();
 	return start.concat(lower);
+}
+
+export function pushLocationUpdates() {
+	Location.startLocationUpdatesAsync(TASK_FETCH_LOCATION, {
+		accuracy: Location.Accuracy.Highest,
+		distanceInterval: 1, // minimum change (in meters) between updates
+		deferredUpdatesInterval: 20000, // minimum interval (in milliseconds) between updates
+		// foregroundService is how you get the task to be updated as often as would be if the app was open
+		foregroundService: {
+			notificationTitle: "Using your location",
+			notificationBody: "To turn off, go back to the app and switch something off."
+		}
+	}).then(res => console.log("auto fetching started...."));
+}
+
+export function stopLocationUpdates() {
+	Location.hasStartedLocationUpdatesAsync(TASK_FETCH_LOCATION).then(
+		value => value && Location.stopLocationUpdatesAsync(TASK_FETCH_LOCATION).then(r => console.log("auto fetching stopped"))
+	);
 }
