@@ -76,9 +76,9 @@ const AppNavigator = props => {
 
 	useEffect(() => {
 		(async () => {
-			let token = (await Notifications.getExpoPushTokenAsync()).data;
-			log.info(token);
 			setIsLoading(true);
+			/*let token = (await Notifications.getExpoPushTokenAsync()).data;
+			log.info(token);*/
 			const result = await getValueFor("credentials");
 			if (result) {
 				const { apiKey, token } = JSON.parse(result);
