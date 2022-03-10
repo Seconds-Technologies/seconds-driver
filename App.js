@@ -16,6 +16,7 @@ Sentry.init({
 });
 
 const App = () => {
+
 	const MyTheme = {
 		...DefaultTheme,
 		colors: {
