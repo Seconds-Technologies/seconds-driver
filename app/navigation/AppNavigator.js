@@ -50,7 +50,7 @@ const AppNavigator = props => {
 		}
 	}
 
-	useEffect(() => {
+	/*useEffect(() => {
 		registerForPushNotificationsAsync().then(token => isAuthenticated && dispatch(updateDriverProfile({ id: driver.id, devicePushToken: token })));
 		if (Platform.OS === 'android') {
 			Notifications.setNotificationChannelAsync('default', {
@@ -72,7 +72,7 @@ const AppNavigator = props => {
 			Notifications.removeNotificationSubscription(notificationListener.current);
 			Notifications.removeNotificationSubscription(responseListener.current);
 		};
-	}, [])
+	}, [])*/
 
 	useEffect(() => {
 		(async () => {
