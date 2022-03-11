@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Text, useWindowDimensions, View } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,11 +7,10 @@ import TodayTasks from "../containers/TodayTasks";
 import AllTasks from "../containers/AllTasks";
 import { subscribe, unsubscribe } from "../store/features/jobs/actions";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
-import { DRIVER_STATUS, JOB_STATUS, TASK_FETCH_LOCATION, THEME } from "../constants";
+import { DRIVER_STATUS, JOB_STATUS, THEME } from "../constants";
 import { Badge } from "react-native-elements";
 import SwitchToggle from "react-native-switch-toggle";
 import { updateDriverProfile } from "../store/features/drivers/actions";
-import * as Location from "expo-location";
 import { pushLocationUpdates, stopLocationUpdates } from "../helpers";
 
 const Home = props => {
@@ -20,11 +19,16 @@ const Home = props => {
 	const isFocused = useIsFocused();
 	const layout = useWindowDimensions();
 	const [index, setIndex] = useState(0);
+	const [routes] = useState([
+		{ key: "today", title: "Today's Tasks" },
+		{ key: "all", title: "All Tasks" }
+	]);
 	const {
 		isAuthenticated,
 		driver: { id: driverId, isOnline }
 	} = useSelector(state => state["drivers"]);
 	const { allJobs, currentJobs } = useSelector(state => state["jobs"]);
+
 	const { backgroundLocation } = useSelector(state => state["permissions"]);
 
 	const getStatus = useCallback(
@@ -34,7 +38,6 @@ const Home = props => {
 		},
 		[allJobs]
 	);
-
 	const toggleSwitch = () => {
 		dispatch(
 			updateDriverProfile({
@@ -44,15 +47,9 @@ const Home = props => {
 			})
 		)
 			.unwrap()
-			.then(({ isOnline }) => {
-				console.log("isOnline:", isOnline);
-				if (backgroundLocation && isOnline) {
-					pushLocationUpdates();
-				} else {
-					stopLocationUpdates();
-				}
-			})
+			.then(() => console.log("Profile updated successfully"))
 			.catch(err => console.log(err.message));
+
 	};
 
 	const renderScene = SceneMap({
@@ -71,11 +68,6 @@ const Home = props => {
 		/>
 	);
 
-	const [routes] = React.useState([
-		{ key: "today", title: "Today's Tasks" },
-		{ key: "all", title: "All Tasks" }
-	]);
-
 	useFocusEffect(
 		useCallback(() => {
 			dispatch(subscribe(driverId))
@@ -84,6 +76,15 @@ const Home = props => {
 			return () => dispatch(unsubscribe());
 		}, [isFocused])
 	);
+
+	useEffect(() => {
+		console.log("isOnline:", isOnline);
+		if (backgroundLocation && isOnline) {
+			pushLocationUpdates();
+		} else {
+			stopLocationUpdates();
+		}
+	}, [backgroundLocation, isOnline])
 
 	return (
 		<View style={tailwind("bg-white md:mx-32 py-5 px-5 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>

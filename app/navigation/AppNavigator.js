@@ -16,6 +16,25 @@ import { TASK_FETCH_LOCATION } from "../constants";
 const log = logger.createLogger();
 const RootStack = createNativeStackNavigator();
 
+TaskManager.defineTask(TASK_FETCH_LOCATION, async ({ data: { locations }, error }) => {
+	if (error) {
+		console.error(error);
+		return;
+	}
+	const creds = await getValueFor("credentials");
+	const [location] = locations;
+	try {
+		if (creds) {
+			const { driverId } = JSON.parse(creds)
+			console.log(driverId);
+			const status = await serverCall("PATCH", "/server/driver/update-location", location.coords, { params: { driverId: driverId } }); // you should use post instead of get to persist data on the backend
+			console.log(status);
+		}
+	} catch (err) {
+		console.error(err);
+	}
+});
+
 const RootStackScreen = ({ userToken }) => (
 	<RootStack.Navigator screenOptions={{ headerShown: false }}>
 		{userToken ? <RootStack.Screen name={"App"} component={DrawerScreen} /> : <RootStack.Screen name={"Auth"} component={AuthStackScreen} />}
@@ -60,7 +79,7 @@ const AppNavigator = props => {
 						{
 							text: "OK",
 							onPress: () =>
-								registerBackgroundLocation().then(status => {
+								registerBackgroundLocation().then(({ status }) => {
 									console.log("STATUS", status);
 									status === "granted" && dispatch(updatePermissions({ backgroundLocation: true }));
 								})
@@ -68,25 +87,13 @@ const AppNavigator = props => {
 					]
 				);
 		});
-		// 1 define the task passing its name and a callback that will be called whenever the location changes
-		TaskManager.defineTask(TASK_FETCH_LOCATION, async ({ data: { locations }, error }) => {
-			if (error) {
-				console.error(error);
-				return;
-			}
-			const [location] = locations;
-			try {
-				const status = await serverCall("PATCH", "/server/driver/update-location", location.coords, { params: { driverId: driver.id } }); // you should use post instead of get to persist data on the backend
-				console.log(status);
-			} catch (err) {
-				console.error(err);
-			}
-		});
 	}, []);
 
 	useEffect(() => {
 		(async () => {
 			setIsLoading(true);
+			console.log(driver.id);
+			// 1 define the task passing its name and a callback that will be called whenever the location changes
 			/*let token = (await Notifications.getExpoPushTokenAsync()).data;
 			log.info(token);*/
 			const result = await getValueFor("credentials");
@@ -99,7 +106,7 @@ const AppNavigator = props => {
 			}
 			setIsLoading(false);
 		})();
-	}, [isAuthenticated]);
+	}, [driver.id]);
 
 	return isLoading ? <Loading loading={isLoading} /> : <RootStackScreen userToken={isAuthenticated} />;
 };

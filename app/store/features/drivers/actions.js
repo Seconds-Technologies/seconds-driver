@@ -14,7 +14,6 @@ export const setDriver = (state, action) => {
 export const updateDriver = (state, action) => {
 	console.log(action.payload);
 	const {
-		id,
 		phone,
 		email,
 		firstname,
@@ -49,7 +48,7 @@ export const loginDriver = createAsyncThunk('drivers/loginDriver', async (payloa
 		const response = await serverCall('POST', '/server/driver/login', payload)
 		await setApiKey(response.apiKey)
 		await setTokenHeader(response.token)
-		await saveKey("credentials", JSON.stringify({apiKey: response.apiKey, token: response.token}))
+		await saveKey("credentials", JSON.stringify({apiKey: response.apiKey, token: response.token, driverId: response.id}))
 		return response
 	} catch (e) {
 		console.log(e)

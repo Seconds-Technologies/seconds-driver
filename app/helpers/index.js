@@ -34,7 +34,7 @@ export function pushLocationUpdates() {
 		// foregroundService is how you get the task to be updated as often as would be if the app was open
 		foregroundService: {
 			notificationTitle: "Using your location",
-			notificationBody: "To turn off, go back to the app and switch something off."
+			notificationBody: "To turn off, go back to the app and toggle off your online status."
 		}
 	}).then(res => console.log("auto fetching started...."));
 }

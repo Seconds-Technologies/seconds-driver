@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
 	foregroundLocation: false,
-	backgroundLocation: true,
+	backgroundLocation: false,
 }
 
 export const permissions = createSlice({

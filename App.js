@@ -11,6 +11,7 @@ import * as Sentry from "@sentry/react-native";
 
 Sentry.init({
 	dsn: "https://036eecf499404481a966cf1799bd435b@o1163923.ingest.sentry.io/6252556",
+	// enableNative: false,
 	enableInExpoDevelopment: true,
 	debug: true // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
 });
