@@ -12,6 +12,7 @@ import { Alert } from "react-native";
 import { updatePermissions } from "../store/features/permissions/permissionsSlice";
 import * as TaskManager from "expo-task-manager";
 import { TASK_FETCH_LOCATION } from "../constants";
+import * as Sentry from "@sentry/react-native";
 
 const log = logger.createLogger();
 const RootStack = createNativeStackNavigator();
@@ -23,9 +24,19 @@ TaskManager.defineTask(TASK_FETCH_LOCATION, async ({ data: { locations }, error 
 	}
 	const creds = await getValueFor("credentials");
 	const [location] = locations;
+	Sentry.addBreadcrumb({
+		category: "location",
+		message: "Fetching driver location:" + location,
+		level: Sentry.Severity.Info,
+	});
 	try {
 		if (creds) {
 			const { driverId } = JSON.parse(creds)
+			Sentry.addBreadcrumb({
+				category: "credentials",
+				message: creds,
+				level: Sentry.Severity.Info,
+			});
 			console.log(driverId);
 			const status = await serverCall("PATCH", "/server/driver/update-location", location.coords, { params: { driverId: driverId } }); // you should use post instead of get to persist data on the backend
 			console.log(status);

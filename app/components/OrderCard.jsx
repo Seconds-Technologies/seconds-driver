@@ -60,7 +60,7 @@ const OrderCard = ({ item, bgStyle, textStyle }) => {
 								dispatch(
 									updateJobStatus({
 										jobId: item._id,
-										status: JOB_STATUS.CANCELLED
+										status: JOB_STATUS.CANCELLED.name
 									})
 								)
 							}
