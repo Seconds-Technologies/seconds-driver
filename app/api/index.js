@@ -2,8 +2,6 @@ import axios from 'axios';
 import { API_BASE_URL, SERVER_BASE_URL, ENV_MODE } from "@env"
 import {deleteKey} from "../services/keyStore";
 
-console.log(API_BASE_URL, SERVER_BASE_URL);
-
 const apiAxios = axios.create({
 	baseURL: `${API_BASE_URL}`,
 });
