@@ -10,7 +10,7 @@ const persistConfig = {
 	key: "root",
 	version: 1,
 	storage: AsyncStorage,
-	whitelist: ['drivers, jobs, permissions'] // only navigation will be persisted
+	whitelist: ['drivers', 'jobs', 'permissions']
 };
 
 const appReducer = combineReducers({

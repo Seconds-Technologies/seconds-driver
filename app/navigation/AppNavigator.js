@@ -56,7 +56,6 @@ const AppNavigator = props => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [notification, setNotification] = useState(false);
 	const { isAuthenticated, driver } = useSelector(state => state["drivers"]);
-	const [location, setLocation] = useState(null);
 	const [errorMsg, setErrorMsg] = useState(null);
 	const { foregroundLocation, backgroundLocation } = useSelector(state => state["permissions"]);
 	const dispatch = useDispatch();
@@ -71,11 +70,6 @@ const AppNavigator = props => {
 	}
 
 	async function registerBackgroundLocation() {
-		let location = await Location.getCurrentPositionAsync({
-			accuracy: Location.Accuracy.BestForNavigation,
-			timeInterval: 5000
-		});
-		setLocation(location);
 		return await Location.requestBackgroundPermissionsAsync();
 	}
 
