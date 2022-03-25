@@ -3,6 +3,7 @@ import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import MainStackScreen from "./MainStack";
+import HistoryStackScreen from './HistoryStack';
 import CustomDrawer from "./CustomDrawer";
 import { logger } from "react-native-logs";
 
@@ -52,6 +53,13 @@ const DrawerScreen = props => {
 				component={MainStackScreen}
 				options={({ route }) => ({
 					drawerLabel: "Home"
+				})}
+			/>
+			<Drawer.Screen
+				name='History'
+				component={HistoryStackScreen}
+				options={({ route }) => ({
+					drawerLabel: "History"
 				})}
 			/>
 			<Drawer.Screen name='Profile' component={Profile} options={{ drawerLabel: "Profile" }} />

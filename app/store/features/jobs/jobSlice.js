@@ -1,7 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {
 	acceptJob,
-	downloadDeliveryPhoto,
 	fetchJobs,
 	removeJob,
 	setAllJobs,
@@ -14,6 +13,8 @@ import { JOB_STATUS } from "../../../constants";
 const initialState = {
 	allJobs: [],
 	currentJobs: [],
+	completedJobs: [],
+	routeJobs: [],
 	dismissed: []
 }
 

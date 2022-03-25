@@ -4,7 +4,7 @@ import { useTailwind } from "tailwind-rn";
 import { useDispatch, useSelector } from "react-redux";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 import TodayTasks from "../containers/TodayTasks";
-import AllTasks from "../containers/AllTasks";
+import TodayRoutes from "../containers/TodayRoutes";
 import { subscribe, unsubscribe } from "../store/features/jobs/actions";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import { DRIVER_STATUS, JOB_STATUS, THEME } from "../constants";
@@ -20,17 +20,31 @@ const Home = props => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = useState(0);
 	const [routes] = useState([
-		{ key: "today", title: "Today's Tasks" },
-		{ key: "all", title: "All Tasks" }
+		{ key: "tasks", title: "Tasks" },
+		{ key: "routes", title: "Routes" }
 	]);
 	const {
 		isAuthenticated,
 		driver: { id: driverId, isOnline }
 	} = useSelector(state => state["drivers"]);
 	const { allJobs, currentJobs } = useSelector(state => state["jobs"]);
-
 	const { backgroundLocation } = useSelector(state => state["permissions"]);
 
+	const renderScene = SceneMap({
+		tasks: TodayTasks,
+		routes: TodayRoutes
+	});
+
+	const renderTabBar = props => (
+		<TabBar
+			{...props}
+			indicatorStyle={{ backgroundColor: THEME.PRIMARY }}
+			style={{ backgroundColor: "transparent" }}
+			labelStyle={{ color: "black" }}
+			renderBadge={({ route }) => route.key === "tasks" && <Badge value={currentJobs ? currentJobs.length : 0} status='success' />}
+			pressColor={"transparent"}
+		/>
+	);
 	const getStatus = useCallback(
 		online => {
 			let isBusy = allJobs.some(job => [JOB_STATUS.DISPATCHING.name, JOB_STATUS.EN_ROUTE.name].includes(job.status));
@@ -38,6 +52,7 @@ const Home = props => {
 		},
 		[allJobs]
 	);
+
 	const toggleSwitch = () => {
 		dispatch(
 			updateDriverProfile({
@@ -52,22 +67,6 @@ const Home = props => {
 
 	};
 
-	const renderScene = SceneMap({
-		today: TodayTasks,
-		all: AllTasks
-	});
-
-	const renderTabBar = props => (
-		<TabBar
-			{...props}
-			indicatorStyle={{ backgroundColor: THEME.PRIMARY }}
-			style={{ backgroundColor: "transparent" }}
-			labelStyle={{ color: "black" }}
-			renderBadge={({ route }) => route.key === "today" && <Badge value={currentJobs ? currentJobs.length : 0} status='success' />}
-			pressColor={"transparent"}
-		/>
-	);
-
 	useFocusEffect(
 		useCallback(() => {
 			dispatch(subscribe(driverId))
@@ -78,7 +77,6 @@ const Home = props => {
 	);
 
 	useEffect(() => {
-		console.log("isOnline:", isOnline);
 		if (backgroundLocation && isOnline) {
 			pushLocationUpdates();
 		} else {

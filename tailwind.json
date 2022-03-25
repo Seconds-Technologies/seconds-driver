@@ -112,6 +112,21 @@
 			"marginTop": 20
 		}
 	},
+	"ml-3": {
+		"style": {
+			"marginLeft": 12
+		}
+	},
+	"mr-3": {
+		"style": {
+			"marginRight": 12
+		}
+	},
+	"mr-2": {
+		"style": {
+			"marginRight": 8
+		}
+	},
 	"flex": {
 		"style": {
 			"display": "flex"
@@ -165,6 +180,11 @@
 	"w-32": {
 		"style": {
 			"width": 128
+		}
+	},
+	"w-5/12": {
+		"style": {
+			"width": "41.666667%"
 		}
 	},
 	"max-w-md": {

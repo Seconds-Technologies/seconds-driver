@@ -8,13 +8,15 @@ import { PersistGate } from "redux-persist/integration/react";
 import AppNavigator from "./app/navigation/AppNavigator";
 import { THEME } from "./app/constants";
 import * as Sentry from "@sentry/react-native";
+import { ENV_MODE } from "@env"
 
 Sentry.init({
 	dsn: "https://036eecf499404481a966cf1799bd435b@o1163923.ingest.sentry.io/6252556",
+	enableNative: false,
 	enableInExpoDevelopment: true,
 	debug: true,
-	environment: "development",
-	release: 'driver-gps-tracking'// If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+	environment: ENV_MODE,
+	release: 'route-optimization'// If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
 });
 
 const App = () => {

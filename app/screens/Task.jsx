@@ -11,8 +11,6 @@ import { capitalize } from "../helpers";
 import Navigate from "../components/svg/Navigate";
 import { URL } from "react-native-url-polyfill";
 import DeliveryProof from "../modals/DeliveryProof";
-import CameraCanvas from "../containers/CameraCanvas";
-import { useFocusEffect } from "@react-navigation/native";
 
 const Task = ({ navigation, route }) => {
 	const [showSignature, setShowSignature] = useState(false);
@@ -35,11 +33,11 @@ const Task = ({ navigation, route }) => {
 			dropoffEndTime,
 			proofOfDelivery
 		} = deliveries[0];
+		const customerName = String(`${firstName} ${lastName}`).substring(0, 25)
 		return {
 			id: _id,
 			orderNumber,
-			firstName,
-			lastName,
+			customerName,
 			streetAddress,
 			city,
 			postcode,
@@ -48,7 +46,7 @@ const Task = ({ navigation, route }) => {
 			phoneNumber,
 			instructions,
 			status,
-			description,
+			description: description ? description.substring(0, 97).concat("...") : description,
 			pickupStartTime,
 			dropoffEndTime,
 			pickedUpAt,
@@ -102,7 +100,7 @@ const Task = ({ navigation, route }) => {
 			<View style={tailwind("flex grow justify-around items-center p-2")}>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
 					<View style={tailwind("flex flex-row justify-between")}>
-						<Item label={"Customer name"} value={`${currentTask.firstName} ${currentTask.lastName}`} />
+						<Item label={"Customer name"} value={currentTask.customerName} />
 						<TouchableOpacity activeOpacity={0.3} style={tailwind("self-end mb-3")} onPress={() => Linking.openURL(navigationURL)}>
 							<Navigate />
 						</TouchableOpacity>
@@ -112,7 +110,14 @@ const Task = ({ navigation, route }) => {
 					<Item label={"Phone number"} value={currentTask.phoneNumber} />
 				</View>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
-					<Item label={"Description"} value={currentTask.description} />
+					<Item
+						label={"Description"}
+						value={
+							currentTask.description && currentTask.description.length > 97
+								? currentTask.description
+								: currentTask.description
+						}
+					/>
 				</View>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
 					<Item label={"Notes"} value={currentTask.instructions} />

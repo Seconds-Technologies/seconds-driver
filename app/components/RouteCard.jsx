@@ -5,11 +5,10 @@ import { capitalize, getColor } from "../helpers";
 import { useTailwind } from "tailwind-rn";
 import { useNavigation } from "@react-navigation/native";
 import { JOB_STATUS } from "../constants";
-import { acceptJob, updateJobStatus } from "../store/features/jobs/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { Badge } from "react-native-elements";
+import Infinity from "./svg/Infinity";
 
-const OrderCard = ({ item, bgStyle, textStyle }) => {
+const RouteCard = ({ item, bgStyle, textStyle }) => {
 	const tailwind = useTailwind();
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
@@ -20,7 +19,7 @@ const OrderCard = ({ item, bgStyle, textStyle }) => {
 		<TouchableOpacity
 			activeOpacity={0.9}
 			style={tailwind("pb-4 border border-gray-300")}
-			onPress={() => navigation.navigate({ name: "Task", key: item["jobSpecification"]["orderNumber"] })}
+			onPress={() => navigation.navigate({ name: "Route", key: item.routeId })}
 		>
 			<View
 				style={{
@@ -29,45 +28,25 @@ const OrderCard = ({ item, bgStyle, textStyle }) => {
 				}}
 			/>
 			<View style={tailwind("px-3 py-2")}>
-				<View style={tailwind('flex flex-row justify-between')}>
-					<Text style={tailwind("font-bold text-gray-400 mb-1")}>{item["jobSpecification"].orderNumber}</Text>
-					{item['routeOptimization'] && <Badge value={item['routeOptimization'].priority} status='primary' />}
+				<View style={tailwind("flex flex-row justify-between")}>
+					<Text style={tailwind("font-bold text-gray-400 mb-1 capitalize")}>
+						{item.routeId}
+					</Text>
+					<View style={tailwind("flex flex-row items-center")}>
+						<Infinity width={26} height={26} />
+					</View>
 				</View>
-				<Text style={tailwind("text-xl text-black mb-1")}>
-					{item["jobSpecification"]["deliveries"][0]["dropoffLocation"]["streetAddress"]}{" "}
-					{item["jobSpecification"]["deliveries"][0]["dropoffLocation"]["postcode"]}
-				</Text>
 				<Text style={tailwind("font-bold text-2xl text-gray-700")}>
-					{item["jobSpecification"]["deliveries"][0]["dropoffLocation"]["firstName"]}{" "}
-					{item["jobSpecification"]["deliveries"][0]["dropoffLocation"]["lastName"]}
+					{`${item.count} ${item.count === 1 ? 'delivery' : 'deliveries'}`}
 				</Text>
 			</View>
 			<View style={tailwind("pr-3 flex items-end")}>
 				{[JOB_STATUS.NEW.name, JOB_STATUS.PENDING.name].includes(item.status) ? (
-					<View style={tailwind("flex grow flex-row justify-around w-1/2")}>
+					<View style={tailwind("flex grow flex-row justify-end w-1/2")}>
 						<Button
 							color='#21c11c'
-							title='Accept'
-							onPress={() =>
-								dispatch(
-									acceptJob({
-										driverId,
-										jobId: item._id
-									})
-								)
-							}
-						/>
-						<Button
-							color='#C8C8C8'
-							title={"Cancel"}
-							onPress={() =>
-								dispatch(
-									updateJobStatus({
-										jobId: item._id,
-										status: JOB_STATUS.CANCELLED.name
-									})
-								)
-							}
+							title='View Route'
+							onPress={() => navigation.navigate({ name: "Route", key: item.routeId })}
 						/>
 					</View>
 				) : (
@@ -80,10 +59,10 @@ const OrderCard = ({ item, bgStyle, textStyle }) => {
 	);
 };
 
-OrderCard.propTypes = {
+RouteCard.propTypes = {
 	item: PropTypes.object.isRequired,
 	bgStyle: PropTypes.string.isRequired,
 	textStyle: PropTypes.string.isRequired
 };
 
-export default OrderCard;
+export default RouteCard;

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API_BASE_URL, SERVER_BASE_URL, ENV_MODE } from "@env"
 import {deleteKey} from "../services/keyStore";
+import * as Sentry from "@sentry/react-native";
 
 const apiAxios = axios.create({
 	baseURL: `${API_BASE_URL}`,
@@ -40,17 +41,17 @@ export function serverCall(method, path, data =null, config = {}) {
 	return new Promise((resolve, reject) => {
 		return !data
 			? serverAxios[method.toLowerCase()](path, config)
-				.then(res => {
-					process.env.ENV_MODE !== "production" && console.log(res.data);
-					resolve(res.data);
+				.then(res => resolve(res.data))
+				.catch(err => {
+					Sentry.captureException(err);
+					err.response.data.error ? reject(err.response.data.error) : reject(err.response.data)
 				})
-				.catch(err => err.response.data.error ? reject(err.response.data.error) : reject(err.response.data))
 			: serverAxios[method.toLowerCase()](path, data, config)
-				.then(res => {
-					process.env.ENV_MODE !== "production" && console.log(res.data);
-					resolve(res.data);
-				})
-				.catch(err => err.response.data.error ? reject(err.response.data.error) : reject(err.response.data));
+				.then(res => resolve(res.data))
+				.catch(err => {
+					Sentry.captureException(err);
+					err.response.data.error ? reject(err.response.data.error) : reject(err.response.data)
+				});
 	});
 }
 
@@ -66,21 +67,15 @@ export function apiCall(method, path, data =null, config={}){
 	return new Promise((resolve, reject) => {
 		return !data
 			? apiAxios[method.toLowerCase()](path, config)
-				.then(res => {
-					ENV_MODE !== "production" && console.log(res.data);
-					resolve(res.data);
-				})
+				.then(res => resolve(res.data))
 				.catch(err => {
-					ENV_MODE !== "production" && console.error(err);
+					Sentry.captureException(err);
 					err.response.data.error ? reject(err.response.data.error) : reject(err.response.data);
 				})
 			: apiAxios[method.toLowerCase()](path, data, config)
-				.then(res => {
-					ENV_MODE !== "production" && console.log(res.data);
-					resolve(res.data);
-				})
+				.then(res => resolve(res.data))
 				.catch(err => {
-					ENV_MODE !== "production" && console.error(err);
+					Sentry.captureException(err);
 					err.response.data.error ? reject(err.response.data.error) : reject(err.response.data);
 				});
 	})

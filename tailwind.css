@@ -87,6 +87,18 @@
   margin-top: 1.25rem
 }
 
+.ml-3 {
+  margin-left: 0.75rem
+}
+
+.mr-3 {
+  margin-right: 0.75rem
+}
+
+.mr-2 {
+  margin-right: 0.5rem
+}
+
 .flex {
   display: flex
 }
@@ -129,6 +141,10 @@
 
 .w-32 {
   width: 8rem
+}
+
+.w-5\/12 {
+  width: 41.666667%
 }
 
 .max-w-md {

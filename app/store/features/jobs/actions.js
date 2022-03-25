@@ -3,14 +3,16 @@ import { apiCall, serverCall } from "../../../api";
 import { JOB_STATUS } from "../../../constants";
 
 export const setAllJobs = (state, action) => {
-	const currentJobs = action.payload.filter(({ _id, status }) => ![JOB_STATUS.COMPLETED.name, JOB_STATUS.CANCELLED.name].includes(status));
+	const currentJobs = action.payload.filter(({ _id, status, routeOptimization }) => ![JOB_STATUS.COMPLETED.name, JOB_STATUS.CANCELLED.name].includes(status) && !routeOptimization);
 	const completedJobs = action.payload.filter(({ _id, status }) => status === JOB_STATUS.COMPLETED.name);
 	const allJobs = action.payload;
+	const routeJobs = action.payload.filter(({ _id, routeOptimization, status }) => routeOptimization &&  ![JOB_STATUS.COMPLETED.name, JOB_STATUS.CANCELLED.name].includes(status));
 	const dismissed = action.payload.filter(({ _id, status }) => status === JOB_STATUS.CANCELLED.name);
 	return {
 		currentJobs,
 		completedJobs,
 		allJobs,
+		routeJobs,
 		dismissed
 	};
 };
@@ -32,6 +34,7 @@ export const updateJob = (state, action) => {
 export const removeJob = (state, action) => {
 	const cancelledJob = action.payload;
 	return {
+		...state,
 		currentJobs: state.currentJobs.filter(({ _id }) => _id !== cancelledJob._id),
 		allJobs: state.allJobs.filter(({ _id }) => _id !== cancelledJob._id),
 		completedJobs: [...state.completedJobs],
