@@ -12,7 +12,7 @@ import { ENV_MODE } from "@env"
 
 Sentry.init({
 	dsn: "https://036eecf499404481a966cf1799bd435b@o1163923.ingest.sentry.io/6252556",
-	enableNative: false,
+	enableNative: ENV_MODE !== 'local',
 	enableInExpoDevelopment: true,
 	debug: true,
 	environment: ENV_MODE,
