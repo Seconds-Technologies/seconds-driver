@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { JOB_STATUS } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import Infinity from "./svg/Infinity";
+import moment from "moment";
 
 const RouteCard = ({ item, bgStyle, textStyle }) => {
 	const tailwind = useTailwind();
@@ -27,7 +28,7 @@ const RouteCard = ({ item, bgStyle, textStyle }) => {
 					backgroundColor: backgroundColor(item.status)
 				}}
 			/>
-			<View style={tailwind("px-3 py-2")}>
+			<View style={tailwind("px-3 pt-2")}>
 				<View style={tailwind("flex flex-row justify-between")}>
 					<Text style={tailwind("font-bold text-gray-400 mb-1 capitalize")}>
 						{item.routeId}
@@ -36,9 +37,12 @@ const RouteCard = ({ item, bgStyle, textStyle }) => {
 						<Infinity width={26} height={26} />
 					</View>
 				</View>
-				<Text style={tailwind("font-bold text-2xl text-gray-700")}>
+				<Text style={tailwind("font-bold text-2xl text-gray-700 mb-1")}>
 					{`${item.count} ${item.count === 1 ? 'delivery' : 'deliveries'}`}
 				</Text>
+				{item.startTime && item.endTime && <Text style={tailwind("text-lg font-semibold mb-1 capitalize")}>
+					{`${moment(item.startTime).format("HH:mm")} - ${moment(item.endTime).format("HH:mm")}`}
+				</Text>}
 			</View>
 			<View style={tailwind("pr-3 flex items-end")}>
 				{[JOB_STATUS.NEW.name, JOB_STATUS.PENDING.name].includes(item.status) ? (

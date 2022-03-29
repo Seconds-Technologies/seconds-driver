@@ -24,7 +24,6 @@ const Home = props => {
 		{ key: "routes", title: "Routes" }
 	]);
 	const {
-		isAuthenticated,
 		driver: { id: driverId, isOnline }
 	} = useSelector(state => state["drivers"]);
 	const { allJobs, currentJobs } = useSelector(state => state["jobs"]);

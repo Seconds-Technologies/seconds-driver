@@ -18,6 +18,8 @@ const TodayRoutes = props => {
 			return {
 				routeId: route.routeOptimization.routeId,
 				count: orders.length,
+				startTime: route.routeOptimization.startTime,
+				endTime: route.routeOptimization.endTime,
 				orders,
 				status: route.status
 			};

@@ -19,14 +19,16 @@ export const setAllJobs = (state, action) => {
 
 export const updateJob = (state, action) => {
 	const currentJobs = state.currentJobs.map(job => (job._id === action.payload._id ? action.payload : job));
+	const allJobs = state.allJobs.map(job => (job._id === action.payload._id ? action.payload : job));
+	const routeJobs = state.routeJobs.map(job => (job._id === action.payload._id ? action.payload : job));
 	const completedJobs = state.allJobs
 		.map(job => (job._id === action.payload._id ? action.payload : job))
 		.filter(job => job.status === JOB_STATUS.COMPLETED);
-	const allJobs = state.allJobs.map(job => (job._id === action.payload._id ? action.payload : job));
 	return {
 		...state,
 		currentJobs,
 		completedJobs,
+		routeJobs,
 		allJobs
 	};
 };
