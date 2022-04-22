@@ -3,11 +3,11 @@ import { serverCall, setApiKey, setTokenHeader } from "../../../api";
 import { saveKey } from "../../../services/keyStore";
 
 export const setDriver = (state, action) => {
-	const { id, clientIds: businessClients, phone, email, firstname, lastname, status, isOnline, vehicle, verified } = action.payload;
+	const { id, clientIds: businessClients, phone, email, firstname, lastname, status, isOnline, profileImageData, vehicle, verified } = action.payload;
 	console.log("Setting driver");
 	return {
 		isAuthenticated: true,
-		driver: { id, businessClients, phone, email, firstname, lastname, status, isOnline, vehicle, verified }
+		driver: { id, businessClients, phone, email, firstname, lastname, status, isOnline, profileImageData, vehicle, verified }
 	};
 };
 

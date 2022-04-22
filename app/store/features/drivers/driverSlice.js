@@ -14,6 +14,7 @@ const initialState = {
 		businessClients: [],
 		vehicle: "",
 		status: "",
+		profileImageData: "",
 		verified: false,
 	}
 }

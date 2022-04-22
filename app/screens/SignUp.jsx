@@ -9,12 +9,14 @@ import {useDispatch} from "react-redux";
 import {persistor} from "../store";
 import {Ionicons} from '@expo/vector-icons'
 import {registerDriver} from "../store/features/drivers/actions";
+import LoadingSpinner from "../modals/LoadingSpinner";
 
 const SignUp = (props) => {
 	const [container, setContainer] = useState("md:mx-32 p-5 border-0 md:border-4 border-gray-300 rounded-xl")
 	const tailwind = useTailwind()
 	const dispatch = useDispatch()
 	const [error, setError] = useState("")
+	const [loading, setLoading] = useState(false)
 
 	useEffect(() => {
 		(async () => {
@@ -48,6 +50,7 @@ const SignUp = (props) => {
 
 	return (
 		<View style={tailwind(container)}>
+			<LoadingSpinner loadingMessage={"Signing you up..."} show={loading} onHide={() => setLoading(false)} />
 			<View style={tailwind('flex grow justify-center md:items-center my-6')}>
 				<Text style={tailwind('text-3xl md:text-2xl text-center font-bold md:font-medium mb-6')}>Complete Sign
 					Up</Text>
@@ -63,9 +66,12 @@ const SignUp = (props) => {
 					}}
 					onSubmit={async (values, actions) => {
 						try {
+							setLoading(true)
 							const newDriver = await dispatch(registerDriver(values)).unwrap()
 							console.log("SIGN UP SUCCESS", newDriver)
+							setLoading(false)
 						} catch (err) {
+							setLoading(false);
 							console.log("SIGN UP FAILED")
 							console.log(err.message)
 							setError(err.message)

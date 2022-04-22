@@ -8,10 +8,12 @@ import { useDispatch } from "react-redux";
 import * as Device from "expo-device";
 import classNames from "classnames";
 import { Ionicons } from "@expo/vector-icons";
+import LoadingSpinner from "../modals/LoadingSpinner";
 
 const Login = ({ navigation }) => {
 	const [container, setContainer] = useState("bg-white md:mx-32 p-5 border-0 md:border-4 border-gray-300 rounded-xl");
 	const [error, setError] = useState("");
+	const [loading, setLoading] = useState(false)
 	const tailwind = useTailwind();
 	const dispatch = useDispatch();
 
@@ -47,6 +49,7 @@ const Login = ({ navigation }) => {
 
 	return (
 		<View style={tailwind(container)}>
+			<LoadingSpinner loadingMessage={"Logging you in..."} show={loading} onHide={() => setLoading(false)} />
 			<View style={tailwind("flex grow justify-center md:items-center my-6")}>
 				<Text style={tailwind("text-3xl md:text-2xl text-center font-bold md:font-medium mb-6")}>Login</Text>
 				{!!error && errorAlert}
@@ -59,9 +62,12 @@ const Login = ({ navigation }) => {
 					}}
 					onSubmit={async (values, actions) => {
 						try {
+							setLoading(true)
 							const newDriver = await dispatch(loginDriver(values)).unwrap();
 							console.log("LOGIN SUCCESS!", newDriver);
+							setLoading(false)
 						} catch (err) {
+							setLoading(false)
 							console.log("LOGIN FAILED", err.message);
 							setError(err.message);
 						}

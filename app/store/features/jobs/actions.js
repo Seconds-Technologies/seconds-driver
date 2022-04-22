@@ -3,10 +3,18 @@ import { apiCall, serverCall } from "../../../api";
 import { JOB_STATUS } from "../../../constants";
 
 export const setAllJobs = (state, action) => {
-	const currentJobs = action.payload.filter(({ _id, status, routeOptimization }) => ![JOB_STATUS.COMPLETED.name, JOB_STATUS.CANCELLED.name].includes(status) && !routeOptimization);
+	const currentJobs = action.payload.filter(({
+		                                           _id,
+		                                           status,
+		                                           routeOptimization
+	                                           }) => ![JOB_STATUS.COMPLETED.name, JOB_STATUS.CANCELLED.name].includes(status) && !routeOptimization);
 	const completedJobs = action.payload.filter(({ _id, status }) => status === JOB_STATUS.COMPLETED.name);
 	const allJobs = action.payload;
-	const routeJobs = action.payload.filter(({ _id, routeOptimization, status }) => routeOptimization &&  ![JOB_STATUS.COMPLETED.name, JOB_STATUS.CANCELLED.name].includes(status));
+	const routeJobs = action.payload.filter(({
+		                                         _id,
+		                                         routeOptimization,
+		                                         status
+	                                         }) => routeOptimization && ![JOB_STATUS.COMPLETED.name, JOB_STATUS.CANCELLED.name].includes(status));
 	const dismissed = action.payload.filter(({ _id, status }) => status === JOB_STATUS.CANCELLED.name);
 	return {
 		currentJobs,
@@ -60,7 +68,11 @@ export const unsubscribe = createAsyncThunk("timer/end", (payload, { dispatch })
 	dispatch(endSubscription);
 });
 
-export const fetchJobs = createAsyncThunk("jobs/fetch-jobs", async (driverId, { dispatch, getState, rejectWithValue }) => {
+export const fetchJobs = createAsyncThunk("jobs/fetch-jobs", async (driverId, {
+	dispatch,
+	getState,
+	rejectWithValue
+}) => {
 	try {
 		return await apiCall("GET", "/api/v1/jobs", null, {
 			params: { driverId: driverId }
@@ -71,7 +83,11 @@ export const fetchJobs = createAsyncThunk("jobs/fetch-jobs", async (driverId, { 
 	}
 });
 
-export const acceptJob = createAsyncThunk("jobs/accept-job", async ({ driverId, jobId }, { dispatch, getState, rejectWithValue }) => {
+export const acceptJob = createAsyncThunk("jobs/accept-job", async ({ driverId, jobId }, {
+	dispatch,
+	getState,
+	rejectWithValue
+}) => {
 	try {
 		return await serverCall("PATCH", "/server/driver/accept", { driverId, jobId });
 	} catch (e) {
@@ -89,21 +105,11 @@ export const updateJobStatus = createAsyncThunk("jobs/update-job", async ({ jobI
 	}
 });
 
-export const uploadImage = createAsyncThunk("jobs/upload-proof", async ({ jobId, img, type }, { rejectWithValue }) => {
+export const uploadSignature = createAsyncThunk("jobs/upload-proof", async ({ jobId, img, type }, { rejectWithValue }) => {
 	try {
-		if (type === "photo") {
-			const formData = new FormData();
-			formData.append("img", img);
-			formData.append("jobId", jobId);
-			formData.append("type", type);
-			const result = await serverCall("POST", `/server/driver/upload-photo`, formData);
-			console.log(result);
-			return result;
-		} else {
-			const result = await serverCall("POST", `/server/driver/upload-signature`, { jobId, img, type });
-			console.log(result);
-			return result;
-		}
+		const result = await serverCall("POST", `/server/driver/upload-signature`, { jobId, img, type });
+		console.log(result);
+		return result;
 	} catch (err) {
 		return rejectWithValue({ message: err.message });
 	}

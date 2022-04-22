@@ -6,7 +6,7 @@ import {
 	setAllJobs,
 	updateJob,
 	updateJobStatus,
-	uploadImage
+	uploadSignature
 } from "./actions";
 import { JOB_STATUS } from "../../../constants";
 
@@ -42,8 +42,8 @@ export const job = createSlice({
 			.addCase(updateJobStatus.rejected, (state, action) => {
 				console.log("REJECTED", action.payload)
 			})
-			.addCase(uploadImage.fulfilled, updateJob)
-			.addCase(uploadImage.rejected, (state, action) => {
+			.addCase(uploadSignature.fulfilled, updateJob)
+			.addCase(uploadSignature.rejected, (state, action) => {
 				console.log("REJECTED", action.payload)
 			})
 	}

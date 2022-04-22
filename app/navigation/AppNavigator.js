@@ -113,7 +113,7 @@ const AppNavigator = props => {
 		})();
 	}, [driver.id]);
 
-	return isLoading ? <Loading loading={isLoading} /> : <RootStackScreen userToken={isAuthenticated} />;
+	return isLoading ? <Loading loading={isLoading} message={"Loading..."} /> : <RootStackScreen userToken={isAuthenticated} />;
 };
 
 export default AppNavigator;

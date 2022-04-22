@@ -1,10 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
+import LoadingSpinner from "../modals/LoadingSpinner";
 
-const Loading = ({loading}) => (
+const Loading = ({loading, message}) => (
 	<View style={styles.container}>
-		<Text>Welcome to the Loading screen!</Text>
+		<LoadingSpinner show={loading} loadingMessage={message} onHide={() => console.log("end loading....")}/>
 	</View>
 );
 

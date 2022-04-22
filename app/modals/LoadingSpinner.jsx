@@ -24,13 +24,14 @@ const LoadingSpinner = ({
 			>
 				<View
 					style={{
+						color,
 						padding: 30,
-						backgroundColor: `white`,
+						backgroundColor: backgroundColor,
 						borderRadius: 13
 					}}
 				>
 					<ActivityIndicator animating={show} color={"black"} size='large' />
-					<Text style={tailwind('text-black mt-2')}>Loading...</Text>
+					<Text style={tailwind('text-black mt-2')}>{loadingMessage}</Text>
 				</View>
 			</View>
 		</Modal>

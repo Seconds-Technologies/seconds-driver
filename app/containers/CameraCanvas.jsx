@@ -74,7 +74,7 @@ const CameraCanvas = props => {
 						onPress={async () => {
 							try {
 								setLoading(true);
-								const info = await FileSystem.uploadAsync(`${SERVER_BASE_URL}/server/driver/upload-photo`, image.uri, {
+								const info = await FileSystem.uploadAsync(`${SERVER_BASE_URL}/server/driver/upload-delivery-photo`, image.uri, {
 									uploadType: FileSystem.FileSystemUploadType.MULTIPART,
 									fieldName: "img",
 									mimeType: "image/jpeg",

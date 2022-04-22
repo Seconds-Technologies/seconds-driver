@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import SignatureScreen from "react-native-signature-canvas";
 import { useDispatch } from "react-redux";
-import { updateJobStatus, uploadImage } from "../store/features/jobs/actions";
+import { updateJobStatus, uploadSignature } from "../store/features/jobs/actions";
 import { JOB_STATUS } from "../constants";
 import { Alert, StyleSheet, useWindowDimensions, View } from "react-native";
 import LoadingSpinner from "../modals/LoadingSpinner";
@@ -17,7 +17,7 @@ const SignatureCanvas = props => {
 	// Called after ref.current.readSignature() reads a non-empty base64 string
 	const handleOK = signature => {
 		setLoading(true);
-		dispatch(uploadImage({ jobId: props.route.params.jobId, img: signature, type: "signature" }))
+		dispatch(uploadSignature({ jobId: props.route.params.jobId, img: signature, type: "signature" }))
 			.unwrap()
 			.then(res =>
 				dispatch(
