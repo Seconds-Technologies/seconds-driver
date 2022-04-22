@@ -16,7 +16,7 @@ Sentry.init({
 	enableInExpoDevelopment: true,
 	debug: true,
 	environment: ENV_MODE,
-	release: 'route-optimization'// If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+	release: 'driver-profile-image'// If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
 });
 
 const App = () => {
