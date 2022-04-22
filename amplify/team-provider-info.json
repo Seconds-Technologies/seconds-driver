@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-secondsdriver-dev-185429-authRole",
+      "UnauthRoleArn": "arn:aws:iam::816796499842:role/amplify-secondsdriver-dev-185429-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::816796499842:role/amplify-secondsdriver-dev-185429-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-secondsdriver-dev-185429-deployment",
+      "UnauthRoleName": "amplify-secondsdriver-dev-185429-unauthRole",
+      "StackName": "amplify-secondsdriver-dev-185429",
+      "StackId": "arn:aws:cloudformation:eu-west-2:816796499842:stack/amplify-secondsdriver-dev-185429/43ef89a0-c265-11ec-b5f1-066519eb88e0",
+      "AmplifyAppId": "dsv0jvl7lds2i"
+    },
+    "categories": {
+      "auth": {
+        "secondsdriver5a2dbdad": {}
+      }
+    }
+  }
+}
