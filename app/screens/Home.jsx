@@ -84,7 +84,7 @@ const Home = props => {
 	}, [backgroundLocation, isOnline])
 
 	return (
-		<View style={tailwind("bg-white md:mx-32 py-5 px-5 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>
+		<View style={tailwind("bg-white md:mx-32 pt-5 pb-2 px-5 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>
 			<TabView
 				renderTabBar={renderTabBar}
 				navigationState={{ index, routes }}
@@ -93,7 +93,6 @@ const Home = props => {
 				initialLayout={{ width: layout.width }}
 			/>
 			<View style={tailwind("flex items-center mb-3")}>
-				<Text style={tailwind("text-lg")}>{isOnline ? "Online" : "Offline"}</Text>
 				<SwitchToggle
 					type={0}
 					switchOn={isOnline}

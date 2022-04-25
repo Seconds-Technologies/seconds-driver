@@ -9,7 +9,7 @@ const TodayTasks = props => {
 	const { currentJobs } = useSelector(state => state["jobs"]);
 
 	return (
-		<View style={tailwind("flex grow justify-center my-6")}>
+		<View style={tailwind("flex grow justify-center mt-6")}>
 			<FlatList
 				keyExtractor={item => item._id.toString()}
 				data={currentJobs}

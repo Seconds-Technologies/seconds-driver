@@ -8,10 +8,10 @@ import Svg, {
 	Image,
 } from "react-native-svg"
 
-const Navigate = (props) => (
+const Navigate = ({ width=47, height=47, ...props }) => (
 	<Svg
-		width={47}
-		height={47}
+		width={width}
+		height={height}
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
 		xmlnsXlink="http://www.w3.org/1999/xlink"

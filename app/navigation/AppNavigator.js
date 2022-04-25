@@ -8,6 +8,7 @@ import AuthStackScreen from "./AuthStack";
 import DrawerScreen from "./drawer";
 import { logger } from "react-native-logs";
 import * as Location from "expo-location";
+import { useFonts } from 'expo-font';
 import { Alert } from "react-native";
 import { updatePermissions } from "../store/features/permissions/permissionsSlice";
 import * as TaskManager from "expo-task-manager";
@@ -54,7 +55,7 @@ const RootStackScreen = ({ userToken }) => (
 
 const AppNavigator = props => {
 	const [isLoading, setIsLoading] = useState(false);
-	const [notification, setNotification] = useState(false);
+	const [fontsLoaded] = useFonts({ IcoMoon: require('../../app/assets/fonts/icomoon.ttf') });
 	const { isAuthenticated, driver } = useSelector(state => state["drivers"]);
 	const [errorMsg, setErrorMsg] = useState(null);
 	const { foregroundLocation, backgroundLocation } = useSelector(state => state["permissions"]);
@@ -113,7 +114,7 @@ const AppNavigator = props => {
 		})();
 	}, [driver.id]);
 
-	return isLoading ? <Loading loading={isLoading} message={"Loading..."} /> : <RootStackScreen userToken={isAuthenticated} />;
+	return isLoading || !fontsLoaded ? <Loading loading={isLoading} message={"Loading..."} /> : <RootStackScreen userToken={isAuthenticated} />;
 };
 
 export default AppNavigator;

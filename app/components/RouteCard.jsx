@@ -19,11 +19,13 @@ const RouteCard = ({ item, bgStyle, textStyle }) => {
 	return (
 		<TouchableOpacity
 			activeOpacity={0.9}
-			style={tailwind("pb-4 border border-gray-300")}
+			style={[tailwind("pb-4 rounded-xl mb-3"), { backgroundColor: 'white', elevation: 1 }]}
 			onPress={() => navigation.navigate({ name: "Route", key: item.routeId })}
 		>
 			<View
 				style={{
+					borderTopRightRadius: 15,
+					borderTopLeftRadius: 15,
 					height: 6,
 					backgroundColor: backgroundColor(item.status)
 				}}

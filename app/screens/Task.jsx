@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { BackHandler, Linking, Text, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { BackHandler, Linking, Text, TouchableOpacity, View, Alert, Platform } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useTailwind } from "tailwind-rn";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,9 +11,13 @@ import { capitalize } from "../helpers";
 import Navigate from "../components/svg/Navigate";
 import { URL } from "react-native-url-polyfill";
 import DeliveryProof from "../modals/DeliveryProof";
+import Icon from "../icons/Icon";
+import { callNumber } from "../utils/contacts";
+import ExtraDetails from "../modals/ExtraDetails";
 
 const Task = ({ navigation, route }) => {
 	const [showSignature, setShowSignature] = useState(false);
+	const [extra, setExtra] = useState({ show: false, message: "" })
 	const tailwind = useTailwind();
 	const dispatch = useDispatch();
 	const { allJobs } = useSelector(state => state["jobs"]);
@@ -28,12 +32,22 @@ const Task = ({ navigation, route }) => {
 		} = allJobs.find(job => job["jobSpecification"]["orderNumber"] === orderNumber);
 		const {
 			description,
-			dropoffLocation: { firstName, lastName, streetAddress, city, postcode, fullAddress, email, phoneNumber, instructions },
+			dropoffLocation: {
+				firstName,
+				lastName,
+				streetAddress,
+				city,
+				postcode,
+				fullAddress,
+				email,
+				phoneNumber,
+				instructions
+			},
 			dropoffStartTime,
 			dropoffEndTime,
 			proofOfDelivery
 		} = deliveries[0];
-		const customerName = String(`${firstName} ${lastName}`).substring(0, 25)
+		const customerName = String(`${firstName} ${lastName}`).substring(0, 25);
 		return {
 			id: _id,
 			orderNumber,
@@ -46,7 +60,7 @@ const Task = ({ navigation, route }) => {
 			phoneNumber,
 			instructions,
 			status,
-			description: description ? description.substring(0, 97).concat("...") : description,
+			description,
 			pickupStartTime,
 			dropoffEndTime,
 			pickedUpAt,
@@ -72,10 +86,6 @@ const Task = ({ navigation, route }) => {
 	);
 
 	const navigationURL = useMemo(() => {
-		/*let baseURL = new URL("https://www.google.com/maps/dir/");
-			let params = new URLSearchParams(baseURL.search);
-			params.set("api", "1");
-			params.set("destination", `${currentTask.streetAddress}${currentTask.city}${currentTask.postcode}`);*/
 		let directionsURL = new URL("https://www.google.com/maps/dir/");
 		directionsURL.searchParams.set("api", "1");
 		directionsURL.searchParams.set("destination", `${currentTask.fullAddress}`);
@@ -83,34 +93,47 @@ const Task = ({ navigation, route }) => {
 		return directionsURL.toString();
 	}, [currentTask]);
 
+	const contactCustomer = useCallback(callNumber, [currentTask]);
+
 	const onValueChange = async (value, index) => {
 		value === JOB_STATUS.COMPLETED.name
 			? setShowSignature(true)
 			: await dispatch(
-					updateJobStatus({
-						jobId: currentTask.id,
-						status: value
-					})
-			  ).unwrap();
+				updateJobStatus({
+					jobId: currentTask.id,
+					status: value
+				})
+			).unwrap();
 	};
 
 	return (
 		<View style={tailwind("md:mx-32 pb-5 px-5 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>
-			<DeliveryProof show={showSignature} onHide={() => setShowSignature(false)} jobId={currentTask.id} orderNumber={currentTask.orderNumber} />
+			<DeliveryProof show={showSignature} onHide={() => setShowSignature(false)} jobId={currentTask.id}
+			               orderNumber={currentTask.orderNumber} />
+			<ExtraDetails show={extra.show} onHide={() => setExtra(false)}/>
 			<View style={tailwind("flex grow justify-around items-center p-2")}>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
 					<View style={tailwind("flex flex-row justify-between")}>
-						<Item label={"Customer name"} value={currentTask.customerName} />
-						<TouchableOpacity activeOpacity={0.3} style={tailwind("self-end mb-3")} onPress={() => Linking.openURL(navigationURL)}>
+						<Item numberOfLines={1} label={"Customer name"} value={currentTask.customerName} />
+						<TouchableOpacity activeOpacity={0.3} style={tailwind("self-end mb-3")}
+						                  onPress={() => Linking.openURL(navigationURL)}>
 							<Navigate />
 						</TouchableOpacity>
 					</View>
-					<Item label={"Address"} value={currentTask.fullAddress} />
-					<Item label={"Email"} value={currentTask.email} />
-					<Item label={"Phone number"} value={currentTask.phoneNumber} />
+					<Item numberOfLines={2} label={"Address"} value={currentTask.fullAddress} />
+					<Item numberOfLines={1} label={"Email"} value={currentTask.email} />
+					<View style={tailwind("flex flex-row items-center")}>
+						<Item numberOfLines={1} label={"Phone number"} value={currentTask.phoneNumber} />
+						<TouchableOpacity activeOpacity={0.5} style={tailwind("ml-4 p-3 rounded-full")}
+						                  onPress={() => contactCustomer(currentTask.phoneNumber)}>
+							<Icon name="phone" size={25} color={"black"} />
+						</TouchableOpacity>
+					</View>
 				</View>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
 					<Item
+						onClick={() => setExtra(prevState => ({show: true, message: currentTask}))}
+						numberOfLines={1}
 						label={"Description"}
 						value={
 							currentTask.description && currentTask.description.length > 97
@@ -120,19 +143,20 @@ const Task = ({ navigation, route }) => {
 					/>
 				</View>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
-					<Item label={"Notes"} value={currentTask.instructions} />
+					<Item numberOfLines={1} label={"Notes"} value={currentTask.instructions} />
 				</View>
 				{currentTask.status !== JOB_STATUS.COMPLETED.name ? (
 					<View style={tailwind("flex flex-row justify-center bg-white w-full p-5 rounded-lg")}>
 						<View style={tailwind(`${statusContainer} text-white ml-1 flex justify-center items-center`)}>
 							<Picker
-								mode='dialog'
+								mode="dialog"
 								numberOfLines={1}
 								style={tailwind(`text-white w-48 h-8`)}
 								selectedValue={currentTask.status}
 								onValueChange={onValueChange}
 							>
-								<Picker.Item label={capitalize(JOB_STATUS.NEW.name)} value={JOB_STATUS.NEW.name} style={tailwind("text-lg")} />
+								<Picker.Item label={capitalize(JOB_STATUS.NEW.name)} value={JOB_STATUS.NEW.name}
+								             style={tailwind("text-lg")} />
 								<Picker.Item
 									label={capitalize(JOB_STATUS.PENDING.name)}
 									value={JOB_STATUS.PENDING.name}

@@ -37,7 +37,6 @@ const Profile = props => {
 			aspect: [4, 3],
 			quality: 1
 		});
-
 		console.log(result);
 		return result;
 	};
@@ -61,6 +60,7 @@ const Profile = props => {
 				<View style={tailwind("md:flex")}>
 					<View style={tailwind("w-full p-2")}>
 						<Formik
+							enableReinitialize
 							validationSchema={profileSchema}
 							initialValues={{
 								id,
@@ -74,18 +74,21 @@ const Profile = props => {
 							}}
 							onSubmit={async values => {
 								try {
-									const info = await FileSystem.uploadAsync(`${SERVER_BASE_URL}/server/driver/upload-profile-picture`, image.uri, {
-										uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-										fieldName: "img",
-										mimeType: "image/jpeg",
-										parameters: {
-											id
-										}
-									});
-									console.log(info);
-									const result = await dispatch(updateDriverProfile(values)).unwrap();
+									let { profileImageData, ...payload} = values
+									if (image) {
+										const info = await FileSystem.uploadAsync(`${SERVER_BASE_URL}/server/driver/upload-profile-picture`, image.uri, {
+											uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+											fieldName: "img",
+											mimeType: "image/jpeg",
+											parameters: {
+												id
+											}
+										});
+										console.log(info);
+									}
+									const result = await dispatch(updateDriverProfile(payload)).unwrap();
 									console.log("Profile Updated!");
-									setSuccess("Profile Updated!")
+									setSuccess("Profile Updated!");
 								} catch (err) {
 									console.log(err.message);
 								}

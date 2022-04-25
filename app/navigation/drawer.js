@@ -3,14 +3,16 @@ import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import MainStackScreen from "./MainStack";
-import HistoryStackScreen from './HistoryStack';
+import HistoryStackScreen from "./HistoryStack";
 import CustomDrawer from "./CustomDrawer";
 import { logger } from "react-native-logs";
+import Payouts from "../screens/Payouts";
+import DrawerIcon from "../icons/Icon";
 
 const Drawer = createDrawerNavigator();
 
 const DrawerScreen = props => {
-	const log = logger.createLogger()
+	const log = logger.createLogger();
 	return (
 		<Drawer.Navigator
 			drawerContent={props => <CustomDrawer {...props} />}
@@ -32,37 +34,45 @@ const DrawerScreen = props => {
 								// log.info(signature);
 								signature
 									? navigation.setOptions({
-											title: "Signature"
-									  })
+										title: "Signature"
+									})
 									: task
-									? navigation.setOptions({
+										? navigation.setOptions({
 											title: `#${task.key}`
-									  })
-									: navigation.setOptions({
+										})
+										: navigation.setOptions({
 											title: route.name
-									  });
+										});
 							}
 						}
 					});
-				},
+				}
 			})}
-			initialRouteName='Orders'
+			initialRouteName="Orders"
 		>
 			<Drawer.Screen
-				name='Orders'
+				name="Orders"
 				component={MainStackScreen}
 				options={({ route }) => ({
-					drawerLabel: "Home"
+					drawerLabel: "Home",
+					drawerIcon: (props) => <DrawerIcon name="home" {...props} />
 				})}
 			/>
 			<Drawer.Screen
-				name='History'
+				name="History"
 				component={HistoryStackScreen}
 				options={({ route }) => ({
-					drawerLabel: "History"
+					drawerLabel: "History",
+					drawerIcon: (props) => <DrawerIcon name="history" {...props} />
 				})}
 			/>
-			<Drawer.Screen name='Profile' component={Profile} options={{ drawerLabel: "Profile" }} />
+			<Drawer.Screen name="Profile" component={Profile} options={{
+				drawerLabel: "Profile",
+				drawerIcon: (props) => <DrawerIcon name="profile" {...props} size={20} />
+			}} />
+			<Drawer.Screen name="Payouts" component={Payouts} options={{
+				drawerLabel: "Payouts", drawerIcon: (props) => <DrawerIcon name="payouts" {...props} />
+			}} />
 		</Drawer.Navigator>
 	);
 };
