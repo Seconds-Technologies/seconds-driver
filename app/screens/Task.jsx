@@ -17,7 +17,7 @@ import ExtraDetails from "../modals/ExtraDetails";
 
 const Task = ({ navigation, route }) => {
 	const [showSignature, setShowSignature] = useState(false);
-	const [extra, setExtra] = useState({ show: false, message: "" })
+	const [extra, setExtra] = useState({ show: false, title: "", message: "" });
 	const tailwind = useTailwind();
 	const dispatch = useDispatch();
 	const { allJobs } = useSelector(state => state["jobs"]);
@@ -32,17 +32,7 @@ const Task = ({ navigation, route }) => {
 		} = allJobs.find(job => job["jobSpecification"]["orderNumber"] === orderNumber);
 		const {
 			description,
-			dropoffLocation: {
-				firstName,
-				lastName,
-				streetAddress,
-				city,
-				postcode,
-				fullAddress,
-				email,
-				phoneNumber,
-				instructions
-			},
+			dropoffLocation: { firstName, lastName, streetAddress, city, postcode, fullAddress, email, phoneNumber, instructions },
 			dropoffStartTime,
 			dropoffEndTime,
 			proofOfDelivery
@@ -99,24 +89,28 @@ const Task = ({ navigation, route }) => {
 		value === JOB_STATUS.COMPLETED.name
 			? setShowSignature(true)
 			: await dispatch(
-				updateJobStatus({
-					jobId: currentTask.id,
-					status: value
-				})
-			).unwrap();
+					updateJobStatus({
+						jobId: currentTask.id,
+						status: value
+					})
+			  ).unwrap();
 	};
 
 	return (
 		<View style={tailwind("md:mx-32 pb-5 px-5 border-0 md:border-4 border-gray-300 md:rounded-xl min-h-full")}>
-			<DeliveryProof show={showSignature} onHide={() => setShowSignature(false)} jobId={currentTask.id}
-			               orderNumber={currentTask.orderNumber} />
-			<ExtraDetails show={extra.show} onHide={() => setExtra(false)}/>
+			<DeliveryProof show={showSignature} onHide={() => setShowSignature(false)} jobId={currentTask.id} orderNumber={currentTask.orderNumber} />
+			<ExtraDetails
+				show={extra.show}
+				onHide={() => setExtra(prevState => ({ ...prevState, show: false }))}
+				title={extra.title}
+				message={extra.message}
+				color='black'
+			/>
 			<View style={tailwind("flex grow justify-around items-center p-2")}>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
 					<View style={tailwind("flex flex-row justify-between")}>
 						<Item numberOfLines={1} label={"Customer name"} value={currentTask.customerName} />
-						<TouchableOpacity activeOpacity={0.3} style={tailwind("self-end mb-3")}
-						                  onPress={() => Linking.openURL(navigationURL)}>
+						<TouchableOpacity activeOpacity={0.3} style={tailwind("self-end mb-3")} onPress={() => Linking.openURL(navigationURL)}>
 							<Navigate />
 						</TouchableOpacity>
 					</View>
@@ -124,39 +118,76 @@ const Task = ({ navigation, route }) => {
 					<Item numberOfLines={1} label={"Email"} value={currentTask.email} />
 					<View style={tailwind("flex flex-row items-center")}>
 						<Item numberOfLines={1} label={"Phone number"} value={currentTask.phoneNumber} />
-						<TouchableOpacity activeOpacity={0.5} style={tailwind("ml-4 p-3 rounded-full")}
-						                  onPress={() => contactCustomer(currentTask.phoneNumber)}>
-							<Icon name="phone" size={25} color={"black"} />
+						<TouchableOpacity
+							activeOpacity={0.5}
+							style={tailwind("ml-4 p-3 rounded-full")}
+							onPress={() => contactCustomer(currentTask.phoneNumber)}
+						>
+							<Icon name='phone' size={25} color={"black"} />
 						</TouchableOpacity>
 					</View>
 				</View>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
-					<Item
-						onClick={() => setExtra(prevState => ({show: true, message: currentTask}))}
-						numberOfLines={1}
-						label={"Description"}
-						value={
-							currentTask.description && currentTask.description.length > 97
-								? currentTask.description
-								: currentTask.description
-						}
-					/>
+					<View style={tailwind("flex flex-row justify-between")}>
+						<Item
+							onClick={() => setExtra(prevState => ({ show: true, message: currentTask.description }))}
+							numberOfLines={1}
+							label={"Description"}
+							value={currentTask.description}
+						/>
+						{currentTask.description.length > 30 && (
+							<TouchableOpacity
+								style={tailwind("flex justify-center")}
+								activeOpacity={0.5}
+								onPress={() =>
+									setExtra(prevState => ({
+										show: true,
+										title: "Package Description",
+										message: currentTask.description
+									}))
+								}
+							>
+								<Icon name='expand' size={20} color={"black"} />
+							</TouchableOpacity>
+						)}
+					</View>
 				</View>
 				<View style={tailwind("flex bg-white w-full p-5 rounded-lg")}>
-					<Item numberOfLines={1} label={"Notes"} value={currentTask.instructions} />
+					<View style={tailwind("flex flex-row justify-between")}>
+						<Item
+							numberOfLines={1}
+							label={"Notes"}
+							value={currentTask.instructions}
+							onClick={() => setExtra(prevState => ({ show: true, message: currentTask.instructions }))}
+						/>
+						{currentTask.instructions.length > 30 && (
+							<TouchableOpacity
+								style={tailwind("flex justify-center")}
+								activeOpacity={0.5}
+								onPress={() =>
+									setExtra(prevState => ({
+										show: true,
+										title: "Delivery Instructions",
+										message: currentTask.instructions
+									}))
+								}
+							>
+								<Icon name='expand' size={20} color={"black"} />
+							</TouchableOpacity>
+						)}
+					</View>
 				</View>
 				{currentTask.status !== JOB_STATUS.COMPLETED.name ? (
 					<View style={tailwind("flex flex-row justify-center bg-white w-full p-5 rounded-lg")}>
 						<View style={tailwind(`${statusContainer} text-white ml-1 flex justify-center items-center`)}>
 							<Picker
-								mode="dialog"
+								mode='dialog'
 								numberOfLines={1}
 								style={tailwind(`text-white w-48 h-8`)}
 								selectedValue={currentTask.status}
 								onValueChange={onValueChange}
 							>
-								<Picker.Item label={capitalize(JOB_STATUS.NEW.name)} value={JOB_STATUS.NEW.name}
-								             style={tailwind("text-lg")} />
+								<Picker.Item label={capitalize(JOB_STATUS.NEW.name)} value={JOB_STATUS.NEW.name} style={tailwind("text-lg")} />
 								<Picker.Item
 									label={capitalize(JOB_STATUS.PENDING.name)}
 									value={JOB_STATUS.PENDING.name}
